@@ -13,6 +13,11 @@ Neuron::Neuron(size_t inputSize, const Activation& activation):
 {
 }
 
+size_t Neuron::size() const
+{
+  return _weights.size();
+}
+
 void Neuron::init(const Initializer& weightInit, const Initializer& biasInit)
 {
   std::generate(_weights.begin(), _weights.end(), weightInit);
@@ -33,6 +38,13 @@ double Neuron::net(const std::vector<double>& input) const
 double Neuron::output(const std::vector<double>& input) const
 {
   return _activation(net(input));
+}
+
+void Neuron::adjust(const std::vector<double>& deltaWeight, double deltaBias)
+{
+  assert(deltaWeight.size() == _weights.size());
+  std::transform(deltaWeight.begin(), deltaWeight.end(), _weights.begin(), _weights.begin(), std::plus<double>());
+  _bias += deltaBias;
 }
 
 } // namespace ccml
