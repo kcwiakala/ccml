@@ -1,14 +1,18 @@
+#ifndef CCML_INITIALIZER_HPP
+#define CCML_INITIALIZER_HPP
+
 #include <functional>
 
 namespace ccml {
 
-
 class Initializer 
 {
 public:
-  typedef std::function<double()> generator_type;
+  typedef std::function<double()> generator_t;
 
-  Initializer(const generator_type&& generator): _generator(generator) {}
+  Initializer(const double value);
+
+  Initializer(const generator_t&& generator): _generator(generator) {}
 
   static Initializer constant(double value);
 
@@ -16,13 +20,15 @@ public:
 
   static Initializer normal(double mean, double sigma);
 
-  generator_type::result_type operator()() const
+  generator_t::result_type operator()() const
   {
     return _generator();
   }
 
 private:
-  generator_type _generator;
+  generator_t _generator;
 };
 
 } // namespace ccml
+
+#endif 

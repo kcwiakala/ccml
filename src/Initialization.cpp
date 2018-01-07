@@ -4,12 +4,16 @@
 
 namespace ccml {
 
+Initializer::Initializer(const double value): 
+  _generator([=](){
+    return value;
+  })
+{
+}
+
 Initializer Initializer::constant(double value)
 {
-  auto generator = [=]() {
-    return value;
-  };
-  return Initializer(generator);
+  return Initializer(value);
 }
 
 Initializer Initializer::uniform(double min, double max)

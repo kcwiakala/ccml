@@ -1,8 +1,11 @@
+#ifndef CCML_ACTIVATION_HPP
+#define CCML_ACTIVATION_HPP
+
 #include <functional>
 
 namespace ccml {
 
-class Activation 
+class Activation
 {
 public:
   double operator()(double x) const
@@ -10,14 +13,12 @@ public:
     return _fn(x);
   }
 
-  double derivative(double x, double y) const
+  double derivative(double y) const
   {
-    return _df(x);
+    return _df(y);
   }
 
-  static Activation& sigmoid();
-
-private:
+protected:
   typedef std::function<double(double)> function_t;
 
   Activation(const function_t& fn, const function_t& df): _fn(fn), _df(df) {}
@@ -28,3 +29,5 @@ private:
 };
 
 } // namespace ccml
+
+#endif

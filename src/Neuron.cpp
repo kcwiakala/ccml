@@ -6,7 +6,7 @@
 
 namespace ccml {
 
-Neuron::Neuron(size_t inputSize, Activation& activation):
+Neuron::Neuron(size_t inputSize, const Activation& activation):
   _activation(activation),
   _net(0.0), 
   _value(0.0), 
@@ -46,7 +46,7 @@ double Neuron::activate(const std::vector<double>& input)
 
 double Neuron::errorGradient(double error) const
 {
-
+  return error * _activation.derivative(_value);
 }
 
 } // namespace ccml

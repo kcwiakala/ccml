@@ -4,6 +4,29 @@
 
 #include <Initialization.hpp>
 
+TEST(InitializationTest, value_constructor) 
+{
+  ccml::Initializer gen(28.1);
+  
+  for(int i=0; i < 100; ++i) 
+  {
+    EXPECT_NEAR(28.1, gen(), 0.0000001);
+  }
+}
+
+TEST(InitializationTest, generator_constructor)
+{
+  int k = 24;
+  ccml::Initializer gen([&]() {
+    return k++;
+  });
+
+  for(int i=0; i < 100; ++i) 
+  {
+    EXPECT_NEAR(i + 24, gen(), 0.0000001);
+  }
+}
+
 TEST(InitializationTest, constant_initializer)
 {
   ccml::Initializer gen(ccml::Initializer::constant(8));

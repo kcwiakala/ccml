@@ -1,3 +1,6 @@
+#ifndef CCML_NEURON_HPP
+#define CCML_NEURON_HPP
+
 #include <vector>
 
 #include <Activation.hpp>
@@ -8,13 +11,7 @@ namespace ccml {
 class Neuron
 {
 public:
-  Neuron(size_t inputSize, Activation& activation);
-
-  Neuron(const Neuron&) = delete;
-  Neuron& operator=(const Neuron&) = delete;
-
-  Neuron(Neuron&&) = default;
-  Neuron& operator=(Neuron&&) = default;
+  Neuron(size_t inputSize, const Activation& activation);
 
 public:
   void init(const Initializer& weightInit, const Initializer& biasInit);
@@ -31,7 +28,7 @@ private:
   double net(const std::vector<double>& input) const;
 
 private:
-  Activation& _activation;
+  const Activation _activation;
   double _net;
   double _value;
   double _bias;
@@ -39,3 +36,5 @@ private:
 };
 
 } // namespace ccml
+
+#endif
