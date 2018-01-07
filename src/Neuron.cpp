@@ -8,8 +8,6 @@ namespace ccml {
 
 Neuron::Neuron(size_t inputSize, const Activation& activation):
   _activation(activation),
-  _net(0.0), 
-  _value(0.0), 
   _bias(0.0), 
   _weights(inputSize, 0.0)
 {
@@ -35,18 +33,6 @@ double Neuron::net(const std::vector<double>& input) const
 double Neuron::output(const std::vector<double>& input) const
 {
   return _activation(net(input));
-}
-
-double Neuron::activate(const std::vector<double>& input)
-{
-  _net = net(input);
-  _value = _activation(_net);
-  return _value;
-}
-
-double Neuron::errorGradient(double error) const
-{
-  return error * _activation.derivative(_value);
 }
 
 } // namespace ccml

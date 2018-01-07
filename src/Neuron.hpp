@@ -20,17 +20,11 @@ public:
 
   double output(const std::vector<double>& input) const;
 
-  double activate(const std::vector<double>& input);
-
-  double errorGradient(double error) const;
-
 private:
   double net(const std::vector<double>& input) const;
 
 private:
   const Activation _activation;
-  double _net;
-  double _value;
   double _bias;
   std::vector<double> _weights;
 };

@@ -1,12 +1,10 @@
 #ifndef CCML_ACTIVATION_HEAVISIDE_HPP
 #define CCML_ACTIVATION_HEAVISIDE_HPP
 
-#include <activation/detail/Implementation.hpp>
-
 namespace ccml {
 namespace activation {
 
-struct Heaviside: public detail::Implementation<Heaviside>
+struct Heaviside
 {
   static double fn(double x) 
   {

@@ -3,12 +3,10 @@
 
 #include <cmath>
 
-#include <activation/detail/Implementation.hpp>
-
 namespace ccml {
 namespace activation {
 
-struct Sigmoid: public detail::Implementation<Sigmoid>
+struct Sigmoid
 {
   static double fn(double x) 
   {

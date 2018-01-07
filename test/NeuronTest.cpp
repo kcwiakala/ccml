@@ -10,5 +10,5 @@ class NeuronTest: public ::testing::Test
 
 TEST_F(NeuronTest, construction_test)
 {
-  ccml::Neuron n(10, ccml::activation::Sigmoid());
+  ccml::Neuron n(10, ccml::Activation::sigmoid());
 }
