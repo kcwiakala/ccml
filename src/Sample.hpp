@@ -1,12 +1,9 @@
 #ifndef CCML_SAMPLE_HPP
 #define CCML_SAMPLE_HPP
 
-#include <vector>
+#include <Types.hpp>
 
 namespace ccml {
-
-typedef std::vector<double> input_t;
-typedef std::vector<double> output_t;
 
 struct Sample 
 {

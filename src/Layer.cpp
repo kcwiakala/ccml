@@ -17,14 +17,12 @@ void Layer::init(const Initializer& initializer)
   init(initializer, initializer);
 }
 
-std::vector<double> Layer::output(const std::vector<double>& x)
+void Layer::output(const array_t& x, array_t& y)
 {
-  std::vector<double> result;
-  result.reserve(_neurons.size());
-  std::transform(_neurons.begin(), _neurons.end(), std::back_inserter(result), [&](Neuron& n) {
+  y.clear();
+  std::transform(_neurons.begin(), _neurons.end(), std::back_inserter(y), [&](Neuron& n) {
     return n.output(x);
   });
-  return result;
 }
 
 } // namespace ccml

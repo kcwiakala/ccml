@@ -29,18 +29,18 @@ void Neuron::init(const Initializer& initializer)
   init(initializer, initializer);
 }
 
-double Neuron::net(const std::vector<double>& input) const
+double Neuron::net(const array_t& input) const
 {
   assert(input.size() == _weights.size());
   return std::inner_product(input.begin(), input.end(), _weights.begin(), _bias);
 }
 
-double Neuron::output(const std::vector<double>& input) const
+double Neuron::output(const array_t& input) const
 {
   return _activation(net(input));
 }
 
-void Neuron::adjust(const std::vector<double>& deltaWeight, double deltaBias)
+void Neuron::adjust(const array_t& deltaWeight, double deltaBias)
 {
   assert(deltaWeight.size() == _weights.size());
   std::transform(deltaWeight.begin(), deltaWeight.end(), _weights.begin(), _weights.begin(), std::plus<double>());

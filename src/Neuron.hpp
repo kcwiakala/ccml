@@ -5,6 +5,7 @@
 
 #include <Activation.hpp>
 #include <Initialization.hpp>
+#include <Types.hpp>
 
 namespace ccml {
 
@@ -20,17 +21,17 @@ public:
 
   void init(const Initializer& initializer);
 
-  double output(const std::vector<double>& input) const;
+  value_t output(const array_t& input) const;
 
-  void adjust(const std::vector<double>& deltaWeight, double deltaBias);
+  void adjust(const array_t& deltaWeight, value_t deltaBias);
 
 private:
-  double net(const std::vector<double>& input) const;
+  double net(const array_t& input) const;
 
 private:
   const Activation _activation;
-  double _bias;
-  std::vector<double> _weights;
+  value_t _bias;
+  array_t _weights;
 };
 
 } // namespace ccml

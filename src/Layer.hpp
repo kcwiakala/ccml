@@ -7,7 +7,7 @@ namespace ccml {
 
 class Layer
 {
-public:
+protected:
   Layer(size_t size);
 
 public:
@@ -15,7 +15,7 @@ public:
 
   void init(const Initializer& initializer);
 
-  std::vector<double> output(const std::vector<double>& x);
+  virtual void output(const array_t& x, array_t& y);
 
 protected:
   std::vector<Neuron> _neurons;

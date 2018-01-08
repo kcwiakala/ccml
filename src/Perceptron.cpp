@@ -12,6 +12,16 @@ Perceptron::Perceptron(size_t inputSize):
 {
 }
 
+void Perceptron::init(const Initializer& weightInit, const Initializer& biasInit)
+{
+  _neuron.init(weightInit, biasInit);
+}
+
+void Perceptron::init(const Initializer& initializer)
+{
+  _neuron.init(initializer);
+}
+
 double Perceptron::output(const std::vector<double>& input) const
 {
   return _neuron.output(input);
