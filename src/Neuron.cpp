@@ -13,20 +13,10 @@ Neuron::Neuron(size_t inputSize, const Activation& activation):
 {
 }
 
-size_t Neuron::size() const
-{
-  return _weights.size();
-}
-
 void Neuron::init(const Initializer& weightInit, const Initializer& biasInit)
 {
   std::generate(_weights.begin(), _weights.end(), weightInit);
   _bias = biasInit();
-}
-
-void Neuron::init(const Initializer& initializer)
-{
-  init(initializer, initializer);
 }
 
 double Neuron::net(const array_t& input) const

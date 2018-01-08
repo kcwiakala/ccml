@@ -19,7 +19,7 @@ void Perceptron::init(const Initializer& weightInit, const Initializer& biasInit
 
 void Perceptron::init(const Initializer& initializer)
 {
-  _neuron.init(initializer);
+  init(initializer, initializer);
 }
 
 double Perceptron::output(const std::vector<double>& input) const

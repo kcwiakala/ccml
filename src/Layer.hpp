@@ -17,6 +17,8 @@ public:
 
   virtual void output(const array_t& x, array_t& y);
 
+  virtual void backpropagate(const array_t& error, array_t& dx) const = 0;
+
 protected:
   std::vector<Neuron> _neurons;
 };

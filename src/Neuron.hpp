@@ -1,7 +1,7 @@
 #ifndef CCML_NEURON_HPP
 #define CCML_NEURON_HPP
 
-#include <vector>
+#include <memory>
 
 #include <Activation.hpp>
 #include <Initialization.hpp>
@@ -19,11 +19,13 @@ public:
 
   void init(const Initializer& weightInit, const Initializer& biasInit);
 
-  void init(const Initializer& initializer);
-
   value_t output(const array_t& input) const;
 
   void adjust(const array_t& deltaWeight, value_t deltaBias);
+
+  const array_t& weights() const;
+
+  const value_t& bias() const;
 
 private:
   double net(const array_t& input) const;
@@ -33,6 +35,21 @@ private:
   value_t _bias;
   array_t _weights;
 };
+
+inline size_t Neuron::size() const
+{
+  return _weights.size();
+}
+
+inline const array_t& Neuron::weights() const
+{
+  return _weights;
+}
+
+inline const value_t& Neuron::bias() const
+{
+  return _bias;
+}
 
 } // namespace ccml
 
