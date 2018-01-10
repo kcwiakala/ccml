@@ -19,6 +19,7 @@ TEST_F(NeuronTest, construction_test)
 
   n.init(Initializer::uniform(-3,1.2), Initializer::normal(0,1));
   std::cout << n << std::endl;
+  std::cout << sizeof(n) << std::endl;
 }
 
 } // namespace ccml

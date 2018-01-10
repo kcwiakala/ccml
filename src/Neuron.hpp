@@ -34,7 +34,7 @@ private:
   double net(const array_t& input) const;
 
 private:
-  const Activation _activation;
+  const Activation& _activation;
   value_t _bias;
   array_t _weights;
 };
