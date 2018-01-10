@@ -2,6 +2,7 @@
 #define CCML_NEURON_HPP
 
 #include <memory>
+#include <ostream>
 
 #include <Activation.hpp>
 #include <Initialization.hpp>
@@ -26,6 +27,8 @@ public:
   const array_t& weights() const;
 
   const value_t& bias() const;
+
+  void dump(std::ostream& stream) const;
 
 private:
   double net(const array_t& input) const;
@@ -52,5 +55,11 @@ inline const value_t& Neuron::bias() const
 }
 
 } // namespace ccml
+
+inline std::ostream& operator<<(std::ostream& stream, const ccml::Neuron& neuron)
+{
+  neuron.dump(stream);
+  return stream;
+}
 
 #endif

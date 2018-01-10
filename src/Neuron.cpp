@@ -37,4 +37,14 @@ void Neuron::adjust(const array_t& deltaWeight, double deltaBias)
   _bias += deltaBias;
 }
 
+void Neuron::dump(std::ostream& stream) const
+{
+  stream << "{w:[";
+  for(size_t i=0; i<_weights.size(); ++i) 
+  {
+    stream << ((i>0) ? "," : "") << _weights[i];
+  }
+  stream << "],b:" << _bias << ",a:" << _activation.name() << "}";
+}
+
 } // namespace ccml

@@ -10,7 +10,7 @@ namespace ccml {
 class Activation
 {
 public:
-  const std::string& name()
+  const std::string& name() const
   {
     return _name;
   }
