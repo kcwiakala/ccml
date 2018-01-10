@@ -25,7 +25,6 @@ protected:
   NeuronLayerTest():
     _layer(new NeuronLayerMock(3,2,Activation::sigmoid()))
   {
-
   }
 
 protected:
@@ -39,7 +38,7 @@ TEST_F(NeuronLayerTest, number_of_neurons)
   EXPECT_EQ(_layer->outputSize(), 6u);
 
   size_t count(0);
-  _layer->forEachNeuron([&](const Neuron&, size_t idx) {
+  _layer->forEachNeuron([&](Neuron&, size_t idx) {
     EXPECT_EQ(count, idx);
     ++count;
   });

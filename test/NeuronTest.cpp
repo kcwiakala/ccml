@@ -9,7 +9,6 @@ namespace ccml {
   
 class NeuronTest: public ::testing::Test 
 {
-
 };
 
 TEST_F(NeuronTest, construction_test)
