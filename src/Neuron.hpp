@@ -6,11 +6,12 @@
 
 #include <Activation.hpp>
 #include <Initialization.hpp>
+#include <Serializable.hpp>
 #include <Types.hpp>
 
 namespace ccml {
 
-class Neuron
+class Neuron: public Serializable
 {
 public:
   Neuron(size_t inputSize, const Activation& activation);
@@ -28,7 +29,7 @@ public:
 
   const value_t& bias() const;
 
-  void dump(std::ostream& stream) const;
+  virtual void toStream(std::ostream& stream) const;
 
 private:
   double net(const array_t& input) const;
@@ -55,11 +56,5 @@ inline const value_t& Neuron::bias() const
 }
 
 } // namespace ccml
-
-inline std::ostream& operator<<(std::ostream& stream, const ccml::Neuron& neuron)
-{
-  neuron.dump(stream);
-  return stream;
-}
 
 #endif

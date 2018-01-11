@@ -1,3 +1,4 @@
+#include <iostream>
 #include <memory>
 
 #include <gtest/gtest.h>
@@ -52,6 +53,8 @@ TEST_F(FullyConnectedLayerTest, activation)
   ASSERT_EQ(y.size(), 2);
   EXPECT_NEAR(y[0], 1 * x[0] + 2 * x[1] + 3 * x[2] + 17, 1e-6);
   EXPECT_NEAR(y[1], 4 * x[0] + 5 * x[1] + 6 * x[2] + 33, 1e-6);
+
+  std::cout << _layer << std::endl;
 }
 
 } // namespace ccml

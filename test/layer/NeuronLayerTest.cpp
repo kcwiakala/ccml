@@ -1,3 +1,4 @@
+#include <iostream>
 #include <memory>
 
 #include <gtest/gtest.h>
@@ -11,7 +12,7 @@ class NeuronLayerMock: public NeuronLayer
 {
 public:
   NeuronLayerMock(size_t layerSize, size_t neuronSize, const Activation& activation):
-    NeuronLayer(layerSize, neuronSize, activation)
+    NeuronLayer("NeuronLayerMock", layerSize, neuronSize, activation)
   {
   }
 

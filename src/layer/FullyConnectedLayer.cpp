@@ -7,7 +7,7 @@ namespace ccml {
 using namespace std::placeholders;
 
 FullyConnectedLayer::FullyConnectedLayer(size_t inputSize, size_t outputSize, const Activation& activation):
-  NeuronLayer(outputSize, inputSize, activation),
+  NeuronLayer("FullyConnectedLayer", outputSize, inputSize, activation),
   _inputSize(inputSize)
 {
 }

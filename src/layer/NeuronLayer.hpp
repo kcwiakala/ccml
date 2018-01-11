@@ -5,11 +5,11 @@
 
 #include <Neuron.hpp>
 
-#include "AbstractLayer.hpp"
+#include "TypedLayer.hpp"
 
 namespace ccml {
 
-class NeuronLayer: public AbstractLayer
+class NeuronLayer: public TypedLayer
 {
 public:
   typedef std::function<void(Neuron&, size_t)> neuron_updater_t;
@@ -25,8 +25,10 @@ public:
 
   void init(const Initializer& weightInit, const Initializer& biasInit);
 
+  virtual void toStream(std::ostream& stream) const;
+
 protected:
-  NeuronLayer(size_t layerSize, size_t neuronSize, const Activation& activation);
+  NeuronLayer(const std::string& type, size_t layerSize, size_t neuronSize, const Activation& activation);
 
 protected:
   typedef std::vector<Neuron> neuron_list_t;
