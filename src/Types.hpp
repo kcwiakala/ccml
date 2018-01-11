@@ -9,13 +9,34 @@ typedef double value_t;
 
 typedef std::vector<value_t> array_t;
 
-typedef array_t tensor_1d_t;
-typedef std::vector<tensor_1d_t> tensor_2d_t;
-typedef std::vector<tensor_2d_t> tensor_3d_t;
-typedef std::vector<tensor_3d_t> tensor_4d_t;
-
 typedef array_t input_t;
 typedef array_t output_t;
+
+class MatrixView
+{
+public:
+  MatrixView(array_t& data, size_t w, size_t h);
+
+  const value_t& at(size_t x, size_t y) const
+  {
+    return _data.at(index(x,y));
+  }
+
+  value_t& at(size_t x, size_t y)
+  {
+    return _data.at(index(x,y));
+  }
+
+private:
+  size_t index(size_t x, size_t y) const
+  {
+    return x + y * _w;
+  }
+
+private:
+  const size_t _w;
+  array_t& _data;
+};
 
 } // namespace ccml
 
