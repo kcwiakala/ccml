@@ -20,8 +20,6 @@ public:
   virtual void output(const array_t& x, array_t& y) = 0;
 
   virtual void backpropagate(const array_t& error, array_t& inputError) const = 0;
-
-  virtual void gradient(const array_t& y, const array_t& dy, array_t& dx) const = 0;
 };
 
 typedef std::shared_ptr<AbstractLayer> layer_ptr_t;

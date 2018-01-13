@@ -21,7 +21,7 @@ public:
 public:
   virtual size_t outputSize() const;
 
-  virtual void gradient(const array_t& y, const array_t& dy, array_t& dx) const;
+  virtual void error(const array_t& y, const array_t& dy, array_t& e) const;
 
   virtual void adjust(const array_t& x, const array_t& dx, const neuron_adjuster_t& adjuster);
 

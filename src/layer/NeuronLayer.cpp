@@ -20,10 +20,10 @@ size_t NeuronLayer::outputSize() const
   return _neurons.size();
 }
 
-void NeuronLayer::gradient(const array_t& y, const array_t& dy, array_t& dx) const
+void NeuronLayer::error(const array_t& y, const array_t& dy, array_t& e) const
 {
-  dx.resize(dy.size());
-  std::transform(y.begin(), y.end(), dy.begin(), dx.begin(), [&](value_t yi, value_t dyi) {
+  e.resize(dy.size());
+  std::transform(y.begin(), y.end(), dy.begin(), e.begin(), [&](value_t yi, value_t dyi) {
     return dyi * _activation.derivative(yi);
   });
 }

@@ -7,8 +7,11 @@ namespace ccml {
 
 typedef double value_t;
 
+template<typename T>
+using vector_2d = std::vector<std::vector<T>>;
+
 typedef std::vector<value_t> array_t;
-typedef std::vector<array_t> array_2d_t;
+typedef vector_2d<value_t> array_2d_t;
 
 typedef array_t input_t;
 typedef array_t output_t;
