@@ -10,13 +10,26 @@ using namespace std::placeholders;
 
 NeuronLayer::NeuronLayer(const std::string& type, size_t layerSize, size_t neuronSize, const Activation& activation):
   TypedLayer(type),
-  _neurons(layerSize, Neuron(neuronSize, activation))
+  _neurons(layerSize, Neuron(neuronSize, activation)),
+  _activation(activation)
 {
 }
 
 size_t NeuronLayer::outputSize() const
 {
   return _neurons.size();
+}
+
+void NeuronLayer::gradient(const array_t& y, const array_t& dy, array_t& dx) const
+{
+  dx.resize(dy.size());
+  std::transform(y.begin(), y.end(), dy.begin(), dx.begin(), [&](value_t yi, value_t dyi) {
+    return dyi * _activation.derivative(yi);
+  });
+}
+
+void NeuronLayer::adjust(const array_t& x, const array_t& dx, const neuron_adjuster_t& adjuster)
+{
 }
 
 void NeuronLayer::forEachNeuron(const neuron_updater_t& updater)

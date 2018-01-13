@@ -18,6 +18,7 @@ public:
 
   MOCK_CONST_METHOD0(inputSize, size_t());
   MOCK_METHOD2(output, void(const array_t&, array_t&));
+  MOCK_CONST_METHOD2(backpropagate, void(const array_t&, array_t&));
 };
 
 class NeuronLayerTest: public testing::Test

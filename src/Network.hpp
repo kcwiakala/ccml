@@ -18,8 +18,18 @@ public:
 
   void push(const layer_ptr_t&& layer);
 
+  size_t inputSize() const;
+
+  size_t outputSize() const;
+
+  size_t size() const;
+
+  layer_ptr_t layer(size_t idx) const;
+
 public:
   void output(const array_t& x, array_t& y) const;
+
+  void output(const array_t& x, array_2d_t& y) const;
 
   array_t output(const array_t& x) const;
 

@@ -16,8 +16,14 @@ public:
 
   typedef std::function<void(const Neuron&, size_t)> neuron_reader_t;
 
+  typedef std::function<void(Neuron&, const array_t&, size_t)> neuron_adjuster_t;
+
 public:
   virtual size_t outputSize() const;
+
+  virtual void gradient(const array_t& y, const array_t& dy, array_t& dx) const;
+
+  virtual void adjust(const array_t& x, const array_t& dx, const neuron_adjuster_t& adjuster);
 
   void forEachNeuron(const neuron_updater_t& updater);
 
@@ -33,7 +39,11 @@ protected:
 protected:
   typedef std::vector<Neuron> neuron_list_t;
   neuron_list_t _neurons;
+
+  const Activation& _activation;
 };
+
+typedef std::shared_ptr<NeuronLayer> neuron_layer_ptr_t;
 
 } // namespace ccml
 

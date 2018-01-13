@@ -8,6 +8,7 @@ namespace ccml {
 typedef double value_t;
 
 typedef std::vector<value_t> array_t;
+typedef std::vector<array_t> array_2d_t;
 
 typedef array_t input_t;
 typedef array_t output_t;

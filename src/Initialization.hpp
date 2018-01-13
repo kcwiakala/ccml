@@ -9,7 +9,7 @@ class Initializer
 {
 public:
   typedef std::function<double()> generator_t;
-
+  
   Initializer(const double value);
 
   Initializer(const generator_t&& generator): _generator(generator) {}

@@ -29,6 +29,8 @@ public:
 
   const value_t& bias() const;
 
+  const Activation& activation() const;
+
   virtual void toStream(std::ostream& stream) const;
 
 private:
@@ -53,6 +55,11 @@ inline const array_t& Neuron::weights() const
 inline const value_t& Neuron::bias() const
 {
   return _bias;
+}
+
+inline const Activation& Neuron::activation() const
+{
+  return _activation;
 }
 
 } // namespace ccml

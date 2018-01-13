@@ -14,6 +14,10 @@ public:
 
   virtual void output(const array_t& x, array_t& y);
 
+  virtual void backpropagate(const array_t& error, array_t& inputError) const;
+
+  virtual void adjust(const array_t& x, const array_t& dx, const neuron_adjuster_t& adjuster);
+
 private:
   const size_t _inputSize;
 };
