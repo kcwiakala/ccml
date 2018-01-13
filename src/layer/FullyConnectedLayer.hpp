@@ -12,7 +12,7 @@ public:
 
   virtual size_t inputSize() const;
 
-  virtual void activate(const array_t& x, array_t& y);
+  virtual void output(const array_t& x, array_t& y);
 
 private:
   const size_t _inputSize;

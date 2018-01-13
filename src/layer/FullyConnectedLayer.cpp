@@ -17,7 +17,7 @@ size_t FullyConnectedLayer::inputSize() const
   return _inputSize;
 }
 
-void FullyConnectedLayer::activate(const array_t& x, array_t& y) 
+void FullyConnectedLayer::output(const array_t& x, array_t& y) 
 {
   y.resize(_neurons.size());
   std::transform(_neurons.begin(), _neurons.end(), y.begin(), std::bind(&Neuron::output, _1, x));

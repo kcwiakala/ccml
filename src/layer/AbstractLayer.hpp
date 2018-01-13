@@ -17,7 +17,7 @@ public:
 
   virtual size_t outputSize() const = 0;
 
-  virtual void activate(const array_t& x, array_t& y) = 0;
+  virtual void output(const array_t& x, array_t& y) = 0;
 };
 
 typedef std::shared_ptr<AbstractLayer> layer_ptr_t;

@@ -19,7 +19,9 @@ public:
   void push(const layer_ptr_t&& layer);
 
 public:
-  void output(const array_t& x, array_t& y);
+  void output(const array_t& x, array_t& y) const;
+
+  array_t output(const array_t& x) const;
 
 private:
   std::vector<layer_ptr_t> _layers;

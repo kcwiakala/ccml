@@ -48,7 +48,7 @@ TEST_F(FullyConnectedLayerTest, activation)
 
   array_t x = {3,6,2};
   array_t y;
-  _layer->activate(x,y);
+  _layer->output(x,y);
 
   ASSERT_EQ(y.size(), 2);
   EXPECT_NEAR(y[0], 1 * x[0] + 2 * x[1] + 3 * x[2] + 17, 1e-6);
