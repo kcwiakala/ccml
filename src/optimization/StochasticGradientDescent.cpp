@@ -1,4 +1,6 @@
 #include <algorithm>
+#include <functional>
+#include <iostream>
 #include <random>
 
 #include <layer/NeuronLayer.hpp>
@@ -7,87 +9,98 @@
 
 namespace ccml {
 
-struct SgdNeuronData
-{
-  value_t gradient;
-};
+using namespace std::placeholders;
 
-void StochasticGradientDescent::updateLayer(Network& network, size_t layerIdx, const array_2d_t& activation, array_t& error)
+StochasticGradientDescent::StochasticGradientDescent(loss_ptr_t loss, double rate):
+  _loss(loss), _rate(rate)
+{
+}
+
+void StochasticGradientDescent::updateLayer(Network& network, size_t layerIdx, 
+  const array_t& input, const array_t& output, array_t& error) const
 {
   thread_local static array_t aux;
+  thread_local static array_t backpropagatedError;
+  
   layer_ptr_t layer = network.layer(layerIdx);
-
-  // If we are in hidden layer, backpropagate error through next layer
-  if(layerIdx < network.size() - 1) 
-  {
-    network.layer(layerIdx + 1)->backpropagate(error, aux);
-    error.swap(aux);
-  }
 
   neuron_layer_ptr_t neuronLayer = std::dynamic_pointer_cast<NeuronLayer>(layer);
   if(neuronLayer)
   {
     // Calculate error gradient
-    neuronLayer->error(activation[layerIdx], error, aux);
+    neuronLayer->error(output, error, aux);
     error.swap(aux);
-    
+
+    if(layerIdx > 0) 
+    {
+      neuronLayer->backpropagate(error, backpropagatedError);  
+    }
+
     // Adjust neurons in the layer
-    const array_t& layerInput = activation[layerIdx - 1];
-    neuronLayer->adjust(layerInput, error, [&](Neuron& n, const array_t& wg, size_t i) {
+    neuronLayer->adjust(input, error, [&](Neuron& n, const array_t& wg, size_t i) {
       aux.resize(wg.size());
       std::transform(wg.begin(), wg.end(), aux.begin(), [=](value_t wgi) {
         return wgi * _rate;
       });
-      n.adjust(aux, error[i]);
+      n.adjust(aux, error[i] * _rate);
     });
+
+    error.swap(backpropagatedError);
+  }
+  else if(layerIdx > 0)
+  {
+    layer->backpropagate(error, backpropagatedError);
+    error.swap(backpropagatedError);
   }
 }
 
-void StochasticGradientDescent::learnSample(Network& network, const Sample& sample)
+void StochasticGradientDescent::learnSample(Network& network, const Sample& sample) const
 {
   thread_local static array_t aux;
 
-  if((network.inputSize() != sample.input.size()) || (network.outputSize() != sample.output.size()))
-  {
-    // ERROR
-  }
+  //assert((network.inputSize() != sample.input.size()) || (network.outputSize() != sample.output.size()))
+  
   array_2d_t activation;
   network.output(sample.input, activation);
   
   const array_t& y = activation.back();
   aux.resize(y.size());
-  std::transform(y.begin(), y.end(), sample.output.begin(), aux.begin(), [](value_t output, value_t expected) {
-    return expected - output;
-  });
-
-  size_t layerIdx = network.size() - 1;
-  while(layerIdx > 0)
+  std::transform(y.begin(), y.end(), sample.output.begin(), aux.begin(), std::bind(&Loss::error, _loss, _1, _2));
+  
+  size_t layerIdx = network.size();
+  while(layerIdx-- > 0)
   {
-    updateLayer(network, layerIdx--, activation, aux);
+    const array_t& input = (layerIdx == 0) ? sample.input : activation[layerIdx - 1];
+    updateLayer(network, layerIdx,  input, activation[layerIdx], aux);
   }
 }
 
 bool StochasticGradientDescent::train(Network& network, const sample_list_t& samples, size_t maxIterations, double epsilon) const
 {
-  // bool success(false);
-  // auto sampleIdx = std::bind(std::uniform_int_distribution<size_t>(0, samples.size() - 1), std::default_random_engine());
+  bool success(false);
+  //auto sampleIdx = std::bind(std::uniform_int_distribution<size_t>(0, samples.size() - 1), std::default_random_engine());
 
-  // for(size_t i=0; i<maxIterations; ++i)
-  // {
-  //   learnSample(network, samples[sampleIdx()]);
-  //   const double totalLoss = _loss.total(network, samples);
-  //   if((i % debugIteration) == 0)
-  //   {
-  //     std::cout << "Total loss after " << i << " iterations is: " << totalLoss;
-  //   }
-  //   if(totalLoss < epsilon)
-  //   {
-  //     success = true;
-  //     break;
-  //   }
-  // }
+  for(size_t i=0; i<maxIterations; ++i)
+  {
+    //learnSample(network, samples[sampleIdx()]);
+    for(size_t j=0; j<samples.size(); ++j) 
+    {
+      learnSample(network, samples[j]);
+    }
 
-  // return success;
+    const double totalLoss = _loss->compute(network, samples);
+    // std::cout << "Total loss after " << i << " iterations is: " << totalLoss << std::endl;
+    // if((i % debugIteration) == 0)
+    // {
+    // }
+    if(totalLoss < epsilon)
+    {
+      success = true;
+      break;
+    }
+  }
+
+  return success;
 }
 
 } // namespace ccml

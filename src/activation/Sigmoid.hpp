@@ -15,7 +15,7 @@ struct Sigmoid
 
   static double df(double y)
   {
-    return y / (1 - y);
+    return y * (1 - y);
   }
 };
 

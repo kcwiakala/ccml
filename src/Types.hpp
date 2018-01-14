@@ -2,6 +2,7 @@
 #define CCML_TYPES_HPP
 
 #include <vector>
+#include <ostream>
 
 namespace ccml {
 

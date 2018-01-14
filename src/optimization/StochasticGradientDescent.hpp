@@ -1,27 +1,23 @@
 #ifndef CCML_STOCHASTIC_GRADIENT_DESCENT_HPP
 #define CCML_STOCHASTIC_GRADIENT_DESCENT_HPP
 
+#include <Loss.hpp>
 #include <Network.hpp>
 #include <Sample.hpp>
 
 namespace ccml {
 
-class Loss
-{
-
-};
-
 class StochasticGradientDescent 
 {
 public:
-  StochasticGradientDescent(const Loss& loss, double rate);
+  StochasticGradientDescent(loss_ptr_t loss, double rate);
 
-  void learnSample(Network& network, const Sample& sample);
+  void learnSample(Network& network, const Sample& sample) const;
 
   bool train(Network& network, const sample_list_t& samples, size_t maxIterations, double epsilon) const;
 
 protected:
-  void updateLayer(Network& network, size_t layerIdx, const array_2d_t& activation, array_t& error);
+  void updateLayer(Network& network, size_t layerIdx, const array_t& input, const array_t& output, array_t& error) const;
 
   template<typename T>
   void prepareNeuronData(const Network& network, vector_2d<T>& neuronData)
@@ -35,7 +31,7 @@ protected:
   } 
 
 private:
-  Loss _loss;
+  loss_ptr_t _loss;
   double _rate;
 };
 

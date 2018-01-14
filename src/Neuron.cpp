@@ -2,6 +2,8 @@
 #include <cassert>
 #include <numeric>
 
+#include <iostream>
+
 #include "Neuron.hpp"
 
 namespace ccml {
@@ -22,7 +24,9 @@ void Neuron::init(const Initializer& weightInit, const Initializer& biasInit)
 double Neuron::net(const array_t& input) const
 {
   assert(input.size() == _weights.size());
-  return std::inner_product(input.begin(), input.end(), _weights.begin(), _bias);
+  const double val = std::inner_product(input.begin(), input.end(), _weights.begin(), _bias);
+  //std::cout << "Neuron net for: " << input << " : " << val << std::endl;
+  return val;
 }
 
 double Neuron::output(const array_t& input) const

@@ -5,6 +5,8 @@
 #include <ostream>
 #include <type_traits>
 
+#include <Types.hpp>
+
 namespace ccml {
 
 class Serializable 
@@ -34,6 +36,17 @@ typename std::enable_if<std::is_base_of<ccml::Serializable, S>::value,std::ostre
   operator<<(std::ostream& stream, const std::unique_ptr<S>& ptr)
 {
   ptr->toStream(stream);
+  return stream;
+}
+
+inline std::ostream& operator<<(std::ostream& stream, const ccml::array_t& array)
+{
+  stream << "[";
+  for(size_t i=0; i<array.size(); ++i)
+  {
+    stream << ((i>0) ? "," : "") << array[i];
+  }
+  stream << "]";
   return stream;
 }
 

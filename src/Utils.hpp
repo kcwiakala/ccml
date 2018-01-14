@@ -24,6 +24,8 @@ void multiply_each(Iter first, Iter last, T val)
   }
 }
 
+
+
 } // namespace ccml
 
 #endif // CCML_UTILS_HPP
