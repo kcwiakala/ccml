@@ -3,7 +3,7 @@
 
 #include <vector>
 
-#include <layer/AbstractLayer.hpp>
+#include <layer/NeuronLayer.hpp>
 
 namespace ccml {
 
@@ -26,6 +26,8 @@ public:
 
   layer_ptr_t layer(size_t idx) const;
 
+  neuron_layer_ptr_t neuronLayer(size_t idx) const;
+
 public:
   void output(const array_t& x, array_t& y) const;
 
@@ -35,6 +37,7 @@ public:
 
 private:
   std::vector<layer_ptr_t> _layers;
+  std::vector<bool> _neuronLayers;
 };
 
 } // namespace ccml

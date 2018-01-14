@@ -11,6 +11,8 @@ namespace ccml {
 class AbstractLayer: public Serializable 
 {
 public:
+  virtual ~AbstractLayer() {}
+
   virtual const std::string& type() const = 0;
 
   virtual size_t inputSize() const = 0;

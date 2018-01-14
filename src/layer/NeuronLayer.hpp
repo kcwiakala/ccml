@@ -19,6 +19,8 @@ public:
   typedef std::function<void(Neuron&, const array_t&, size_t)> neuron_adjuster_t;
 
 public:
+  virtual ~NeuronLayer() {}
+
   virtual size_t outputSize() const;
 
   virtual void error(const array_t& y, const array_t& dy, array_t& e) const;

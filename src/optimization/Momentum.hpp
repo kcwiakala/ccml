@@ -5,6 +5,17 @@
 
 namespace ccml {
 
+class MomentumNeuronData: public SgdNeuronData
+{
+public:
+  MomentumNeuronData(const Neuron& neuron);
+
+  virtual void reset();
+
+  array_t deltaWeight;
+  value_t deltaBias;
+};
+
 class Momentum: public StochasticGradientDescent
 {
 public:
@@ -15,16 +26,12 @@ public:
 protected:
   virtual void adjust(neuron_layer_ptr_t layer, const array_t& input, const array_t& error, size_t layerIndex);
 
-  virtual void reset();
+  virtual neuron_data_ptr_t createNeuronData(const Neuron& neuron) const;
+
+  virtual MomentumNeuronData& neuronData(size_t layerIdx, size_t neuronIdx);
 
 private:
-  struct NeuronData
-  {
-    array_t deltaWeight;
-    value_t deltaBias;
-  };
 
-  vector_2d<NeuronData> _neuronData;
   const double _momentum;
 };
 

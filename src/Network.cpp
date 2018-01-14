@@ -11,6 +11,7 @@ void Network::push(const layer_ptr_t&& layer)
       throw std::logic_error("Not matching layer input size");
     }
   }
+  _neuronLayers.push_back(static_cast<bool>(std::dynamic_pointer_cast<NeuronLayer>(layer)));
   _layers.emplace_back(layer);
 }
 
@@ -32,6 +33,11 @@ size_t Network::size() const
 layer_ptr_t Network::layer(size_t idx) const
 {
   return _layers.at(idx);
+}
+
+neuron_layer_ptr_t Network::neuronLayer(size_t idx) const
+{
+  return (_neuronLayers.at(idx)) ? std::static_pointer_cast<NeuronLayer>(_layers.at(idx)) : 0;
 }
 
 void Network::output(const array_t& x, array_t& y) const

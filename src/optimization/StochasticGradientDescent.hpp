@@ -6,7 +6,21 @@
 #include <layer/NeuronLayer.hpp>
 #include <Sample.hpp>
 
+#include <optimization/NeuronData.hpp>
+
+
 namespace ccml {
+
+class SgdNeuronData: public NeuronData
+{
+public:
+  SgdNeuronData(const Neuron& neuron);
+
+  virtual void reset();
+
+  array_t batchWeightGradient;
+  value_t batchBiasGradient;
+};
 
 class StochasticGradientDescent 
 {
@@ -22,25 +36,20 @@ protected:
 
   void updateLayer(size_t layerIdx, const array_t& input, const array_t& output, array_t& error);
 
+protected:
   virtual void adjust(neuron_layer_ptr_t layer, const array_t& input, const array_t& error, size_t layerIndex);
 
-  virtual void reset();
+  virtual neuron_data_ptr_t createNeuronData(const Neuron& neuron) const;
 
-  template<typename T>
-  void prepareNeuronData(const Network& network, vector_2d<T>& neuronData)
-  {
-    neuronData.clear();
-    neuronData.resize(network.size());
-    for(size_t i=0; i<network.size(); ++i) 
-    {
-      neuronData[i].resize(network.layer(i)->outputSize());
-    }
-  } 
+  virtual SgdNeuronData& neuronData(size_t layerIdx, size_t neuronIdx);
+
+  virtual void initNeuronData();
 
 protected:
   Network& _network;
   loss_ptr_t _loss;
   const double _rate;
+  vector_2d<neuron_data_ptr_t> _neuronData;
 };
 
 } // namespace ccml
