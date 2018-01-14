@@ -3,6 +3,7 @@
 
 #include <Loss.hpp>
 #include <Network.hpp>
+#include <layer/NeuronLayer.hpp>
 #include <Sample.hpp>
 
 namespace ccml {
@@ -10,14 +11,20 @@ namespace ccml {
 class StochasticGradientDescent 
 {
 public:
-  StochasticGradientDescent(loss_ptr_t loss, double rate);
+  StochasticGradientDescent(Network& network, loss_ptr_t loss, double rate);
 
-  void learnSample(Network& network, const Sample& sample) const;
+  virtual ~StochasticGradientDescent();
 
-  bool train(Network& network, const sample_list_t& samples, size_t maxIterations, double epsilon) const;
+  bool train(const sample_list_t& samples, size_t maxIterations, double epsilon);
 
 protected:
-  void updateLayer(Network& network, size_t layerIdx, const array_t& input, const array_t& output, array_t& error) const;
+  void learnSample(const Sample& sample);
+
+  void updateLayer(size_t layerIdx, const array_t& input, const array_t& output, array_t& error);
+
+  virtual void adjust(neuron_layer_ptr_t layer, const array_t& input, const array_t& error, size_t layerIndex);
+
+  virtual void reset();
 
   template<typename T>
   void prepareNeuronData(const Network& network, vector_2d<T>& neuronData)
@@ -30,9 +37,10 @@ protected:
     }
   } 
 
-private:
+protected:
+  Network& _network;
   loss_ptr_t _loss;
-  double _rate;
+  const double _rate;
 };
 
 } // namespace ccml

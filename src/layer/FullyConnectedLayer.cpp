@@ -39,7 +39,9 @@ void FullyConnectedLayer::backpropagate(const array_t& error, array_t& inputErro
 
 void FullyConnectedLayer::adjust(const array_t& x, const array_t& dx, const neuron_adjuster_t& adjuster)
 {
-  array_t aux(x.size());
+  thread_local static array_t aux;
+  
+  aux.resize(x.size());
   // for(size_t i=0; i<_neurons.size(); ++i) 
   // {
   //   const array_t& weights = _neurons[i].weights();

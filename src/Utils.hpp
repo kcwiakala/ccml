@@ -3,6 +3,8 @@
 
 #include <algorithm>
 
+#include <Types.hpp>
+
 namespace ccml {
 
 template<typename Iter, typename Fun>
@@ -24,7 +26,17 @@ void multiply_each(Iter first, Iter last, T val)
   }
 }
 
-
+template<typename T, typename Fun>
+void for_each(vector_2d<T>& cont, Fun fun)
+{
+  for(auto& row: cont)
+  {
+    for(T& obj: row)
+    {
+      fun(obj);
+    }
+  }
+}
 
 } // namespace ccml
 

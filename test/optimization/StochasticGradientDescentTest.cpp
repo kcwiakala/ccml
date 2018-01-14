@@ -4,6 +4,7 @@
 
 #include <layer/FullyConnectedLayer.hpp>
 #include <optimization/StochasticGradientDescent.hpp>
+#include <optimization/Momentum.hpp>
 
 namespace ccml {
 
@@ -14,9 +15,7 @@ protected:
 };
 
 TEST_F(StochasticGradientDescentTest, simple)
-{
-  _optimizer = std::make_unique<StochasticGradientDescent>(Loss::quadratic(), 0.5);
-  
+{ 
   Network net;
   neuron_layer_ptr_t l1 = std::make_shared<FullyConnectedLayer>(2, 3, Activation::sigmoid());
   neuron_layer_ptr_t l2 = std::make_shared<FullyConnectedLayer>(3, 1, Activation::sigmoid());
@@ -25,6 +24,8 @@ TEST_F(StochasticGradientDescentTest, simple)
 
   l1->init(Initializer::uniform(-0.3, -0.5), Initializer::uniform(-0.2, -0.5));
   l2->init(Initializer::uniform(-0.2, -0.5), Initializer::uniform(-0.2, -0.5));
+
+  _optimizer = std::make_unique<Momentum>(net, Loss::quadratic(), 0.5, 0.8);
 
   array_t aux;
 
@@ -38,7 +39,7 @@ TEST_F(StochasticGradientDescentTest, simple)
   };
   
   std::cout << "Loss before training: " << loss->compute(net, xorSamples) << std::endl;
-  const bool success = _optimizer->train(net, xorSamples, 100000, 0.001);
+  const bool success = _optimizer->train(xorSamples, 100000, 0.001);
   EXPECT_TRUE(success);
   std::cout << "Loss after training: " << loss->compute(net, xorSamples) << std::endl;
 
