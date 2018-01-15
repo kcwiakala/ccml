@@ -5,7 +5,7 @@
 
 namespace ccml {
 
-class MomentumNeuronData: public SgdNeuronData
+class MomentumNeuronData: public NeuronData
 {
 public:
   MomentumNeuronData(const Neuron& neuron);
@@ -24,9 +24,7 @@ public:
   virtual ~Momentum();
 
 protected:
-  virtual void adjust(neuron_layer_ptr_t layer, const array_t& input, const array_t& error, size_t layerIndex);
-
-  virtual void adjustNeuron(Neuron& neuron, NeuronData& neuronData);
+  virtual void adjustNeuron(Neuron& neuron, GradientData& gradients, NeuronData& neuronData);
 
   virtual neuron_data_ptr_t createNeuronData(const Neuron& neuron) const;
 

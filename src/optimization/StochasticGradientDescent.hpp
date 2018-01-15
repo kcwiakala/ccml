@@ -8,18 +8,16 @@
 
 #include <optimization/NeuronData.hpp>
 
-
 namespace ccml {
 
-class SgdNeuronData: public NeuronData
+struct GradientData
 {
-public:
-  SgdNeuronData(const Neuron& neuron);
+  GradientData(const Neuron& neuron);
 
-  virtual void reset();
+  void reset();
 
-  array_t weightGradient;
-  value_t biasGradient;
+  array_t weights;
+  value_t bias;
 };
 
 class StochasticGradientDescent 
@@ -34,10 +32,6 @@ public:
 protected:
   void learnSample(const Sample& sample);
 
-  void learnSample2(const Sample& sample);
-
-  void updateLayer(size_t layerIdx, const array_t& input, const array_t& output, array_t& error);
-
   void outputError(const array_t& output, const array_t& expected, array_t& error) const;
 
   void backpropagate(const array_2d_t& activation, array_2d_t& error) const;
@@ -46,16 +40,12 @@ protected:
 
   void adjustNeurons();
 
-  virtual void adjustNeuron(Neuron& neuron, NeuronData& neuronData);
-
-  void adjust(const array_t& input, const array_2d_t& activation, const array_2d_t& error);
-
 protected:
-  virtual void adjust(neuron_layer_ptr_t layer, const array_t& input, const array_t& error, size_t layerIndex);
+  virtual void adjustNeuron(Neuron& neuron, GradientData& gradients, NeuronData& neuronData);
 
   virtual neuron_data_ptr_t createNeuronData(const Neuron& neuron) const;
 
-  virtual SgdNeuronData& neuronData(size_t layerIdx, size_t neuronIdx);
+  virtual NeuronData& neuronData(size_t layerIdx, size_t neuronIdx);
 
   virtual void initNeuronData();
 
@@ -64,6 +54,7 @@ protected:
   loss_ptr_t _loss;
   const double _rate;
   vector_2d<neuron_data_ptr_t> _neuronData;
+  vector_2d<GradientData> _gradients;
 };
 
 } // namespace ccml

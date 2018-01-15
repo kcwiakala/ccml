@@ -28,8 +28,8 @@ TEST_F(StochasticGradientDescentTest, simple)
   l2->init(Initializer::uniform(-0.2, -0.5), Initializer::uniform(-0.2, -0.5));
   // l3->init(Initializer::uniform(-0.2, -0.5), Initializer::uniform(-0.2, -0.5));
 
-  //_optimizer = std::make_unique<StochasticGradientDescent>(net, Loss::quadratic(), 0.5);
-  _optimizer = std::make_unique<Momentum>(net, Loss::quadratic(), 0.5, 0.8);
+  _optimizer = std::make_unique<StochasticGradientDescent>(net, Loss::quadratic(), 0.5);
+  //_optimizer = std::make_unique<Momentum>(net, Loss::quadratic(), 0.5, 0.8);
 
   array_t aux;
 
