@@ -18,8 +18,8 @@ public:
 
   virtual void reset();
 
-  array_t batchWeightGradient;
-  value_t batchBiasGradient;
+  array_t weightGradient;
+  value_t biasGradient;
 };
 
 class StochasticGradientDescent 
@@ -34,7 +34,21 @@ public:
 protected:
   void learnSample(const Sample& sample);
 
+  void learnSample2(const Sample& sample);
+
   void updateLayer(size_t layerIdx, const array_t& input, const array_t& output, array_t& error);
+
+  void outputError(const array_t& output, const array_t& expected, array_t& error) const;
+
+  void backpropagate(const array_2d_t& activation, array_2d_t& error) const;
+
+  void updateGradients(const array_t& input, const array_2d_t& activation, const array_2d_t& error);
+
+  void adjustNeurons();
+
+  virtual void adjustNeuron(Neuron& neuron, NeuronData& neuronData);
+
+  void adjust(const array_t& input, const array_2d_t& activation, const array_2d_t& error);
 
 protected:
   virtual void adjust(neuron_layer_ptr_t layer, const array_t& input, const array_t& error, size_t layerIndex);

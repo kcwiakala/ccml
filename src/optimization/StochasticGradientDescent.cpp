@@ -13,15 +13,15 @@ using namespace std::placeholders;
 
 
 SgdNeuronData::SgdNeuronData(const Neuron& neuron):
-  batchWeightGradient(neuron.weights().size(), 0.0),
-  batchBiasGradient(0.0)
+  weightGradient(neuron.weights().size(), 0.0),
+  biasGradient(0.0)
 {
 }
 
 void SgdNeuronData::reset()
 {
-  batchBiasGradient = 0.0;
-  std::fill(batchWeightGradient.begin(), batchWeightGradient.end(), 0.0);
+  biasGradient = 0.0;
+  std::fill(weightGradient.begin(), weightGradient.end(), 0.0);
 }
 
 StochasticGradientDescent::StochasticGradientDescent(Network& network, loss_ptr_t loss, double rate):
@@ -38,7 +38,7 @@ void StochasticGradientDescent::adjust(neuron_layer_ptr_t layer, const array_t& 
 {
   thread_local static array_t aux; 
 
-  layer->adjust(input, error, [&](Neuron& n, const array_t& wg, size_t i) {
+  layer->splitError(input, error, [&](Neuron& n, const array_t& wg, size_t i) {
     aux.resize(wg.size());
     std::transform(wg.begin(), wg.end(), aux.begin(), [=](value_t wgi) {
       return wgi * _rate;
@@ -79,6 +79,115 @@ void StochasticGradientDescent::updateLayer(size_t layerIdx, const array_t& inpu
   }
 }
 
+void StochasticGradientDescent::backpropagate(const array_2d_t& activation, array_2d_t& error) const
+{
+  thread_local static array_t aux;
+
+  size_t layerIdx = _network.size();
+  while(layerIdx-- > 0)
+  {
+    neuron_layer_ptr_t neuronLayer = _network.neuronLayer(layerIdx);
+    if(neuronLayer)
+    {
+        // Calculate error term for the neuron layer
+        neuronLayer->error(activation[layerIdx], error[layerIdx], aux);
+        error[layerIdx].swap(aux);
+    }
+    if(layerIdx > 0)
+    {
+      _network.layer(layerIdx)->backpropagate(error[layerIdx], error[layerIdx-1]);
+    }
+  }
+}
+
+void StochasticGradientDescent::outputError(const array_t& output, const array_t& expected, array_t& error) const
+{
+  error.resize(output.size());
+  std::transform(output.begin(), output.end(), expected.begin(), error.begin(), std::bind(&Loss::error, _loss, _1, _2));
+}
+
+void StochasticGradientDescent::adjust(const array_t& input, const array_2d_t& activation, const array_2d_t& error)
+{
+  for(size_t layerIdx=0; layerIdx < _network.size(); ++layerIdx)
+  {
+    neuron_layer_ptr_t layer = _network.neuronLayer(layerIdx);
+    if(layer)
+    {
+      const array_t& layerInput = (layerIdx == 0) ? input : activation[layerIdx - 1];
+      // ...
+    }
+  }
+}
+
+void StochasticGradientDescent::updateGradients(const array_t& input, const array_2d_t& activation, const array_2d_t& error)
+{
+  for(size_t layerIdx=0; layerIdx < _network.size(); ++layerIdx)
+  {
+    neuron_layer_ptr_t layer = _network.neuronLayer(layerIdx);
+    if(layer)
+    {
+      const array_t& layerInput = (layerIdx == 0) ? input : activation[layerIdx - 1];
+      layer->splitError(layerInput, error[layerIdx], [&](Neuron& neuron, const array_t& inputError, size_t neuronIdx) {
+        SgdNeuronData& data = neuronData(layerIdx, neuronIdx);
+        std::transform(inputError.begin(), inputError.end(), 
+            data.weightGradient.begin(), data.weightGradient.begin(), std::plus<value_t>());
+        data.biasGradient += error[layerIdx][neuronIdx];
+      });
+    }
+  }
+}
+
+void StochasticGradientDescent::adjustNeurons()
+{
+  for(size_t layerIdx=0; layerIdx < _network.size(); ++layerIdx)
+  {
+    neuron_layer_ptr_t layer = _network.neuronLayer(layerIdx);
+    if(layer)
+    {
+      layer->forEachNeuron([&](Neuron& neuron, size_t neuronIdx) {
+        SgdNeuronData& data = neuronData(layerIdx, neuronIdx);
+        adjustNeuron(neuron, data);
+        data.SgdNeuronData::reset();
+      });
+    }
+  }
+}
+
+void StochasticGradientDescent::adjustNeuron(Neuron& neuron, NeuronData& data)
+{
+  SgdNeuronData& sgdData = static_cast<SgdNeuronData&>(data);
+  array_t& wg = sgdData.weightGradient;
+  std::transform(wg.begin(), wg.end(), wg.begin(), [this](value_t wgi) {
+    return wgi * _rate;
+  });
+  neuron.adjust(wg, sgdData.biasGradient * _rate);
+}
+
+void StochasticGradientDescent::learnSample2(const Sample& sample)
+{
+  thread_local static array_2d_t activation;
+  thread_local static array_2d_t error;
+
+  error.resize(_network.size());
+
+  // Feed forward the sample
+  _network.output(sample.input, activation);
+
+  // Calculate output error
+  outputError(activation.back(), sample.output, error.back());
+
+  // Backpropagate the error
+  backpropagate(activation, error);
+
+  //adjust(sample.input, activation, error);
+
+  // Update gradients for each neuron in the network
+  updateGradients(sample.input, activation, error);
+
+  // Adjust neurons with stored gradients
+  adjustNeurons();
+}
+
 void StochasticGradientDescent::learnSample(const Sample& sample)
 {
   //assert((network.inputSize() != sample.input.size()) || (network.outputSize() != sample.output.size()))
@@ -112,7 +221,8 @@ bool StochasticGradientDescent::train(const sample_list_t& samples, size_t maxIt
     //learnSample(samples[sampleIdx()]);
     for(size_t j=0; j<samples.size(); ++j) 
     {
-      learnSample(samples[j]);
+      // learnSample(samples[j]);
+      learnSample2(samples[j]);
     }
 
     const double totalLoss = _loss->compute(_network, samples);

@@ -25,7 +25,7 @@ public:
 
   virtual void error(const array_t& y, const array_t& dy, array_t& e) const;
 
-  virtual void adjust(const array_t& x, const array_t& dx, const neuron_adjuster_t& adjuster);
+  virtual void splitError(const array_t& x, const array_t& error, const neuron_adjuster_t& adjuster);
 
   void forEachNeuron(const neuron_updater_t& updater);
 

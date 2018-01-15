@@ -37,26 +37,17 @@ void FullyConnectedLayer::backpropagate(const array_t& error, array_t& inputErro
   } 
 }
 
-void FullyConnectedLayer::adjust(const array_t& x, const array_t& dx, const neuron_adjuster_t& adjuster)
+void FullyConnectedLayer::splitError(const array_t& x, const array_t& error, const neuron_adjuster_t& adjuster)
 {
   thread_local static array_t aux;
   
   aux.resize(x.size());
-  // for(size_t i=0; i<_neurons.size(); ++i) 
-  // {
-  //   const array_t& weights = _neurons[i].weights();
-  //   std::transform(weights.begin(), weights.end(), aux.begin(), [&](value_t w) {
-  //     return w * dx[i];
-  //   });
-  //   adjuster(_neurons[i], aux, i);
-  // }
 
   for(size_t i=0; i<_neurons.size(); ++i)
   {
-    //const array_t& weights = _neurons[i].weights();
     for(size_t j=0; j<_inputSize; ++j)
     {
-      aux[j] = x[j] * dx[i];
+      aux[j] = x[j] * error[i];
     }
     adjuster(_neurons[i], aux, i);
   }

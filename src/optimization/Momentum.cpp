@@ -33,7 +33,7 @@ Momentum::~Momentum()
 
 void Momentum::adjust(neuron_layer_ptr_t layer, const array_t& input, const array_t& error, size_t layerIndex)
 {
-  layer->adjust(input, error, [&](Neuron& n, const array_t& wg, size_t i) {
+  layer->splitError(input, error, [&](Neuron& n, const array_t& wg, size_t i) {
     MomentumNeuronData& data = neuronData(layerIndex, i);
 
     array_t& dw = data.deltaWeight;
@@ -44,6 +44,20 @@ void Momentum::adjust(neuron_layer_ptr_t layer, const array_t& input, const arra
 
     n.adjust(data.deltaWeight, data.deltaBias);
   });
+}
+
+void Momentum::adjustNeuron(Neuron& neuron, NeuronData& data)
+{
+  MomentumNeuronData& momentumData = static_cast<MomentumNeuronData&>(data);
+  
+  const array_t& wg = momentumData.weightGradient;
+  array_t& dw = momentumData.deltaWeight;
+  std::transform(wg.begin(), wg.end(), dw.begin(), dw.begin(), [&](value_t wgi, value_t dwi) {
+    return wgi * _rate + dwi * _momentum;
+  });
+  momentumData.deltaBias = momentumData.biasGradient * _rate + momentumData.deltaBias * _momentum;
+
+  neuron.adjust(momentumData.weightGradient, momentumData.biasGradient);
 }
 
 neuron_data_ptr_t Momentum::createNeuronData(const Neuron& neuron) const

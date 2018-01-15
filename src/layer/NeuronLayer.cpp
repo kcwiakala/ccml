@@ -29,7 +29,7 @@ void NeuronLayer::error(const array_t& y, const array_t& dy, array_t& e) const
   });
 }
 
-void NeuronLayer::adjust(const array_t& x, const array_t& dx, const neuron_adjuster_t& adjuster)
+void NeuronLayer::splitError(const array_t& x, const array_t& error, const neuron_adjuster_t& adjuster)
 {
 }
 
