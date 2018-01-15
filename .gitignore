@@ -6,4 +6,6 @@ CMakeCache.txt
 Makefile
 
 test.out
-ccml
+*.a
+*.so
+utest

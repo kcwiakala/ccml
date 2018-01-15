@@ -2,12 +2,28 @@ cmake_minimum_required (VERSION 2.6)
 
 project (ccml)
 
-file(GLOB_RECURSE SOURCES "src/*.cpp")
-file(GLOB_RECURSE TEST_SOURCES "test/*.cpp")
-
-set (CMAKE_CXX_FLAGS "-Wall")
+set(CMAKE_CXX_STANDARD 17)
 
 include_directories("src")
 
-add_executable(ccml ${SOURCES} ${TEST_SOURCES})
-target_link_libraries(ccml gtest gmock pthread)
+file(GLOB_RECURSE sources "src/*.cpp")
+file(GLOB_RECURSE test_sources "test/*.cpp")
+
+set(CMAKE_CXX_FLAGS "-Wall")
+
+add_library(ccml STATIC ${sources})
+
+target_compile_options(ccml PUBLIC -std=c++1y -Wall -Wfloat-conversion)
+
+find_package(GTest) 
+
+if(GTEST_FOUND) 
+  add_executable(utest ${test_sources})
+
+  target_compile_definitions(utest PUBLIC UNIT_TESTS)
+  
+  target_include_directories(utest PUBLIC ${GTEST_INCLUDE_DIRS})
+
+  target_link_libraries(utest PUBLIC ${GTEST_LIBRARIES} gmock pthread ccml)
+
+endif()
