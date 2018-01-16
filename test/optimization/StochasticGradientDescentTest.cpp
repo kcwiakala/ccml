@@ -24,8 +24,9 @@ TEST_F(StochasticGradientDescentTest, simple)
   net.push(l2);
   // net.push(l3);
 
-  l1->init(Initializer::uniform(-0.3, -0.5), Initializer::uniform(-0.3, -0.5));
-  l2->init(Initializer::uniform(-0.3, -0.5), Initializer::uniform(-0.3, -0.5));
+  auto initializer = Initializer::normal(0.0, 0.3);
+  l1->init(initializer, initializer);
+  l2->init(initializer, initializer);
   // l3->init(Initializer::uniform(-0.2, -0.5), Initializer::uniform(-0.2, -0.5));
 
   //_optimizer = std::make_unique<StochasticGradientDescent>(net, Loss::quadratic(), 0.5);

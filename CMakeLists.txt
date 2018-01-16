@@ -9,11 +9,9 @@ include_directories("src")
 file(GLOB_RECURSE sources "src/*.cpp")
 file(GLOB_RECURSE test_sources "test/*.cpp")
 
-set(CMAKE_CXX_FLAGS "-Wall")
-
 add_library(ccml STATIC ${sources})
 
-target_compile_options(ccml PUBLIC -std=c++1y -Wall -Wfloat-conversion)
+target_compile_options(ccml PUBLIC -std=c++1y -Wall -Wfloat-conversion -O0)
 
 find_package(GTest) 
 

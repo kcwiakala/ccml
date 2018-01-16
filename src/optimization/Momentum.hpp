@@ -24,7 +24,7 @@ public:
   virtual ~Momentum();
 
 protected:
-  virtual void adjustNeuron(Neuron& neuron, GradientData& gradients, NeuronData& neuronData);
+  virtual void adjustNeuron(Neuron& neuron, GradientData& gradients, size_t layerIdx, size_t neuronIdx);
 
   virtual neuron_data_ptr_t createNeuronData(const Neuron& neuron) const;
 

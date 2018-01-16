@@ -18,7 +18,7 @@ NeuronLayer::NeuronLayer(const std::string& type, size_t layerSize, size_t neuro
 
 size_t NeuronLayer::outputSize() const
 {
-  return _neurons.size();
+  return size();
 }
 
 void NeuronLayer::error(const array_t& y, const array_t& dy, array_t& e) const
@@ -46,6 +46,21 @@ void NeuronLayer::forEachNeuron(const neuron_reader_t& reader) const
 void NeuronLayer::init(const Initializer& weightInit, const Initializer& biasInit)
 {
   std::for_each(_neurons.begin(), _neurons.end(), std::bind(&Neuron::init, _1, weightInit, biasInit));
+}
+
+size_t NeuronLayer::size() const
+{
+  return _neurons.size();
+}
+
+const Neuron& NeuronLayer::neuron(size_t idx) const
+{
+  return _neurons[idx];
+}
+
+Neuron& NeuronLayer::neuron(size_t idx)
+{
+  return _neurons[idx];
 }
 
 void NeuronLayer::toStream(std::ostream& stream) const

@@ -30,9 +30,9 @@ Momentum::~Momentum()
 {
 }
 
-void Momentum::adjustNeuron(Neuron& neuron, GradientData& gradients, NeuronData& data)
+void Momentum::adjustNeuron(Neuron& neuron, GradientData& gradients, size_t layerIdx, size_t neuronIdx)
 {
-  MomentumNeuronData& momentumData = static_cast<MomentumNeuronData&>(data);
+  MomentumNeuronData& momentumData = neuronData(layerIdx, neuronIdx);
   
   const array_t& wg = gradients.weights;
   array_t& dw = momentumData.deltaWeight;

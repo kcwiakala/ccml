@@ -1,6 +1,7 @@
 #ifndef CCML_NETWORK_HPP
 #define CCML_NETWORK_HPP
 
+#include <functional>
 #include <vector>
 
 #include <layer/NeuronLayer.hpp>

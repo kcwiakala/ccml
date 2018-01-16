@@ -35,6 +35,13 @@ public:
 
   virtual void toStream(std::ostream& stream) const;
 
+public:
+  size_t size() const;
+
+  const Neuron& neuron(size_t idx) const;
+
+  Neuron& neuron(size_t idx);
+
 protected:
   NeuronLayer(const std::string& type, size_t layerSize, size_t neuronSize, const Activation& activation);
 

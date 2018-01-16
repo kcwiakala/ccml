@@ -2,6 +2,8 @@
 
 namespace ccml {
 
+using namespace std::placeholders;
+
 void Network::push(const layer_ptr_t&& layer)
 {
   if(!_layers.empty())

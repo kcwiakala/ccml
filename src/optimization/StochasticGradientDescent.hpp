@@ -8,6 +8,8 @@
 
 #include <optimization/NeuronData.hpp>
 
+#include "Backpropagation.hpp"
+
 namespace ccml {
 
 struct GradientData
@@ -20,10 +22,10 @@ struct GradientData
   value_t bias;
 };
 
-class StochasticGradientDescent 
+class StochasticGradientDescent: public Backpropagation
 {
 public:
-  StochasticGradientDescent(Network& network, loss_ptr_t loss, double rate);
+  StochasticGradientDescent(Network& network, const loss_ptr_t& loss, double rate);
 
   virtual ~StochasticGradientDescent();
 
@@ -32,16 +34,12 @@ public:
 protected:
   void learnSample(const Sample& sample);
 
-  void outputError(const array_t& output, const array_t& expected, array_t& error) const;
-
-  void backpropagate(const array_2d_t& activation, array_2d_t& error) const;
-
   void updateGradients(const array_t& input, const array_2d_t& activation, const array_2d_t& error);
 
   void adjustNeurons();
 
 protected:
-  virtual void adjustNeuron(Neuron& neuron, GradientData& gradients, NeuronData& neuronData);
+  virtual void adjustNeuron(Neuron& neuron, GradientData& gradients, size_t layerIdx, size_t neuronIdx);
 
   virtual neuron_data_ptr_t createNeuronData(const Neuron& neuron) const;
 
@@ -50,8 +48,6 @@ protected:
   virtual void initNeuronData();
 
 protected:
-  Network& _network;
-  loss_ptr_t _loss;
   const double _rate;
   vector_2d<neuron_data_ptr_t> _neuronData;
   vector_2d<GradientData> _gradients;
