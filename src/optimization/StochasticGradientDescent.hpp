@@ -6,8 +6,6 @@
 #include <layer/NeuronLayer.hpp>
 #include <Sample.hpp>
 
-#include <optimization/NeuronData.hpp>
-
 #include "Backpropagation.hpp"
 
 namespace ccml {
@@ -41,15 +39,12 @@ protected:
 protected:
   virtual void adjustNeuron(Neuron& neuron, GradientData& gradients, size_t layerIdx, size_t neuronIdx);
 
-  virtual neuron_data_ptr_t createNeuronData(const Neuron& neuron) const;
+  virtual void initTraining();
 
-  virtual NeuronData& neuronData(size_t layerIdx, size_t neuronIdx);
-
-  virtual void initNeuronData();
+  virtual void initEpoch();
 
 protected:
   const double _rate;
-  vector_2d<neuron_data_ptr_t> _neuronData;
   vector_2d<GradientData> _gradients;
 };
 

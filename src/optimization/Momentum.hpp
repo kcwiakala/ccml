@@ -1,34 +1,30 @@
 #ifndef CCML_MOMENTUM_HPP
 #define CCML_MOMENTUM_HPP
 
-#include <optimization/StochasticGradientDescent.hpp>
+#include "SgdExtension.hpp"
 
 namespace ccml {
 
-class MomentumNeuronData: public NeuronData
+class MomentumNeuronData
 {
 public:
   MomentumNeuronData(const Neuron& neuron);
 
-  virtual void reset();
+  void reset();
 
   array_t deltaWeight;
   value_t deltaBias;
 };
 
-class Momentum: public StochasticGradientDescent
+class Momentum: public SgdExtension<MomentumNeuronData>
 {
 public:
   Momentum(Network& network, loss_ptr_t loss, double rate, double momentum);
 
-  virtual ~Momentum();
+  virtual ~Momentum() {}
 
 protected:
   virtual void adjustNeuron(Neuron& neuron, GradientData& gradients, size_t layerIdx, size_t neuronIdx);
-
-  virtual neuron_data_ptr_t createNeuronData(const Neuron& neuron) const;
-
-  virtual MomentumNeuronData& neuronData(size_t layerIdx, size_t neuronIdx);
 
 private:
 

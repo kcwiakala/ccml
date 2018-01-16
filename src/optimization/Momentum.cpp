@@ -20,38 +20,23 @@ void MomentumNeuronData::reset()
 }
 
 Momentum::Momentum(Network& network, loss_ptr_t loss, double rate, double momentum):
-  StochasticGradientDescent(network, loss, rate),
+  SgdExtension(network, loss, rate),
   _momentum(momentum)
-{
-    
-}
-
-Momentum::~Momentum()
-{
+{    
 }
 
 void Momentum::adjustNeuron(Neuron& neuron, GradientData& gradients, size_t layerIdx, size_t neuronIdx)
 {
-  MomentumNeuronData& momentumData = neuronData(layerIdx, neuronIdx);
+  MomentumNeuronData& data = neuronData(layerIdx, neuronIdx);
   
   const array_t& wg = gradients.weights;
-  array_t& dw = momentumData.deltaWeight;
+  array_t& dw = data.deltaWeight;
   std::transform(wg.begin(), wg.end(), dw.begin(), dw.begin(), [&](value_t wgi, value_t dwi) {
     return wgi * _rate + dwi * _momentum;
   });
-  momentumData.deltaBias = gradients.bias * _rate + momentumData.deltaBias * _momentum;
+  data.deltaBias = gradients.bias * _rate + data.deltaBias * _momentum;
 
-  neuron.adjust(momentumData.deltaWeight, momentumData.deltaBias);
-}
-
-neuron_data_ptr_t Momentum::createNeuronData(const Neuron& neuron) const
-{
-  return std::make_unique<MomentumNeuronData>(neuron);
-}
-
-MomentumNeuronData& Momentum::neuronData(size_t layerIdx, size_t neuronIdx)
-{
-  return static_cast<MomentumNeuronData&>(StochasticGradientDescent::neuronData(layerIdx, neuronIdx));
+  neuron.adjust(data.deltaWeight, data.deltaBias);
 }
 
 } // namespace ccml

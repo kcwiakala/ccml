@@ -27,7 +27,6 @@ StochasticGradientDescent::StochasticGradientDescent(Network& network, const los
   Backpropagation(network, loss), _rate(rate)
 {
   _gradients.resize(_network.size());
-
   for(size_t layerIdx=0; layerIdx < _network.size(); ++layerIdx)
   {
     neuron_layer_ptr_t layer = _network.neuronLayer(layerIdx);
@@ -105,15 +104,15 @@ void StochasticGradientDescent::learnSample(const Sample& sample)
 
 bool StochasticGradientDescent::train(const sample_list_t& samples, size_t maxIterations, double epsilon)
 {
-  initNeuronData();
+  initTraining();
 
   bool success(false);
 
-  auto sampleIdx = std::bind(std::uniform_int_distribution<size_t>(0, samples.size() - 1), std::default_random_engine());
+  //auto sampleIdx = std::bind(std::uniform_int_distribution<size_t>(0, samples.size() - 1), std::default_random_engine());
 
   for(size_t i=0; i<maxIterations; ++i)
   {
-    //learnSample(samples[sampleIdx()]);
+    initEpoch();
     for(size_t j=0; j<samples.size(); ++j) 
     {
       learnSample(samples[j]);
@@ -131,37 +130,12 @@ bool StochasticGradientDescent::train(const sample_list_t& samples, size_t maxIt
   return success;
 }
 
-neuron_data_ptr_t StochasticGradientDescent::createNeuronData(const Neuron& neuron) const
+void StochasticGradientDescent::initTraining()
 {
-  return neuron_data_ptr_t();
 }
 
-NeuronData& StochasticGradientDescent::neuronData(size_t layerIdx, size_t neuronIdx)
+void StochasticGradientDescent::initEpoch()
 {
-  return *(_neuronData.at(layerIdx).at(neuronIdx));
-}
-
-void StochasticGradientDescent::initNeuronData()
-{
-  if(_neuronData.empty())
-  {
-    _neuronData.resize(_network.size());
-    for(size_t layerIdx=0; layerIdx<_network.size(); ++layerIdx) 
-    {
-      neuron_layer_ptr_t neuronLayer = _network.neuronLayer(layerIdx);
-      if(neuronLayer)
-      {
-        _neuronData[layerIdx].reserve(neuronLayer->outputSize());
-        neuronLayer->forEachNeuron([&](const Neuron& neuron, size_t j) {
-          _neuronData[layerIdx].emplace_back(createNeuronData(neuron));
-        });
-      }
-    }
-  }
-  else
-  {
-    for_each(_neuronData, std::bind(&NeuronData::reset, _1));
-  }
 }
 
 } // namespace ccml

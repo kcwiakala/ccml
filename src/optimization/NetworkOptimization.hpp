@@ -1,8 +1,6 @@
 #ifndef CCML_NETWORK_OPTIMIZATION_HPP
 #define CCML_NETWORK_OPTIMIZATION_HPP
 
-#include <functional>
-
 #include <Loss.hpp>
 #include <Network.hpp>
 
