@@ -127,14 +127,14 @@ bool StochasticGradientDescent::train(const sample_list_t& samples, size_t maxIt
       success = true;
       break;
     }
-    if(maxIterations % 10 == 0)
-    {
-      if(std::abs(totalLoss - prevLoss) < 1e-6)
-      {
-        break;
-      }
-      prevLoss = totalLoss;
-    }
+    // if(maxIterations % 10 == 0)
+    // {
+    //   if(std::abs(totalLoss - prevLoss) < 1e-6)
+    //   {
+    //     break;
+    //   }
+    //   prevLoss = totalLoss;
+    // }
   }
 
   return success;

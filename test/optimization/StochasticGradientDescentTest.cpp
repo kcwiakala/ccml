@@ -25,7 +25,7 @@ TEST_F(StochasticGradientDescentTest, simple)
   net.push(l2);
   // net.push(l3);
 
-  auto initializer = Initializer::normal(0.0, 0.4);
+  auto initializer = Initializer::uniform(-0.3, 0.3);
   l1->init(initializer, initializer);
   l2->init(initializer, initializer);
   l3->init(initializer, initializer);

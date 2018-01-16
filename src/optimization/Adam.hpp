@@ -20,7 +20,7 @@ struct AdamNeuronData
 class Adam: public SgdExtension<AdamNeuronData>
 {
 public:
-  Adam(Network& network, const loss_ptr_t& loss, double rate, double beta1 = 0.9, double beta2 = 0.999, double epsilon = 1e-6);
+  Adam(Network& network, const loss_ptr_t& loss, double rate, double beta1 = 0.9, double beta2 = 0.999, double epsilon = 1e-8);
 
   virtual ~Adam() {}
 
@@ -36,8 +36,7 @@ private:
   const double _beta2;
   const double _epsilon;
 
-  double _bias1;
-  double _bias2;
+  double _lr;
   size_t _t;
 };
 
