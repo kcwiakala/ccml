@@ -106,6 +106,8 @@ bool StochasticGradientDescent::train(const sample_list_t& samples, size_t maxIt
 {
   initTraining();
 
+  double prevLoss = 1e9;
+
   bool success(false);
 
   //auto sampleIdx = std::bind(std::uniform_int_distribution<size_t>(0, samples.size() - 1), std::default_random_engine());
@@ -119,11 +121,19 @@ bool StochasticGradientDescent::train(const sample_list_t& samples, size_t maxIt
     }
     adjustNeurons();
 
-    const double totalLoss = _loss->compute(_network, samples);
+    double totalLoss = _loss->compute(_network, samples);
     if(totalLoss < epsilon)
     {
       success = true;
       break;
+    }
+    if(maxIterations % 10 == 0)
+    {
+      if(std::abs(totalLoss - prevLoss) < 1e-6)
+      {
+        break;
+      }
+      prevLoss = totalLoss;
     }
   }
 

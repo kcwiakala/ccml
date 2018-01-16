@@ -19,7 +19,7 @@ void MomentumNeuronData::reset()
   std::fill(deltaWeight.begin(), deltaWeight.end(), 0.0);
 }
 
-Momentum::Momentum(Network& network, loss_ptr_t loss, double rate, double momentum):
+Momentum::Momentum(Network& network, const loss_ptr_t& loss, double rate, double momentum):
   SgdExtension(network, loss, rate),
   _momentum(momentum)
 {    
