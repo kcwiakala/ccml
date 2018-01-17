@@ -14,6 +14,7 @@ struct Sample
 };
 
 typedef std::vector<Sample> sample_list_t;
+typedef std::pair<sample_list_t::const_iterator, sample_list_t::const_iterator> sample_batch_t;
 
 } // namespace ccml
 

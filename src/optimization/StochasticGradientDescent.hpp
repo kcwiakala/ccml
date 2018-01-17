@@ -27,12 +27,18 @@ public:
 
   virtual ~StochasticGradientDescent();
 
-  bool train(const sample_list_t& samples, size_t maxIterations, double epsilon);
+  bool train(const sample_list_t& samples, size_t batchSize, size_t maxIterations, double epsilon);
 
 protected:
   void learnSample(const Sample& sample);
 
+  void learnBatch(const sample_batch_t& batch);
+
+  void advanceBatch(sample_batch_t& batch, const sample_list_t& samples, size_t batchSize) const;
+
   void updateGradients(const array_t& input, const array_2d_t& activation, const array_2d_t& error);
+
+  void normalizeGradients(size_t batchSize);
 
   void adjustNeurons();
 

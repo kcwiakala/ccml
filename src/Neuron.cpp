@@ -17,7 +17,7 @@ Neuron::Neuron(size_t inputSize, const Activation& activation):
 
 void Neuron::init(const Initializer& weightInit, const Initializer& biasInit)
 {
-  std::generate(_weights.begin(), _weights.end(), weightInit);
+  std::generate(_weights.begin(), _weights.end(), std::cref(weightInit));
   _bias = biasInit();
 }
 

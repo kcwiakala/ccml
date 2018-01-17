@@ -64,6 +64,25 @@ void StochasticGradientDescent::updateGradients(const array_t& input, const arra
   }
 }
 
+void StochasticGradientDescent::normalizeGradients(size_t batchSize)
+{
+  for(size_t layerIdx=0; layerIdx < _network.size(); ++layerIdx)
+  {
+    neuron_layer_ptr_t layer = _network.neuronLayer(layerIdx);
+    if(layer)
+    {
+      for(size_t neuronIdx=0; neuronIdx < layer->size(); ++neuronIdx)
+      {
+        GradientData& gradients = _gradients[layerIdx][neuronIdx];
+        std::transform(gradients.weights.begin(), gradients.weights.end(), gradients.weights.begin(), [=](value_t g) {
+          return g / batchSize;
+        });
+        gradients.bias /= batchSize;
+      }
+    }
+  }
+}
+
 void StochasticGradientDescent::adjustNeurons()
 {
   for(size_t layerIdx=0; layerIdx < _network.size(); ++layerIdx)
@@ -102,39 +121,70 @@ void StochasticGradientDescent::learnSample(const Sample& sample)
   updateGradients(sample.input, activation, error);
 }
 
-bool StochasticGradientDescent::train(const sample_list_t& samples, size_t maxIterations, double epsilon)
+void StochasticGradientDescent::learnBatch(const sample_batch_t& batch)
+{
+  sample_list_t::const_iterator iter = batch.first;
+  while(iter != batch.second)
+  {
+    learnSample(*iter++);
+  }
+  normalizeGradients(std::distance(batch.first, batch.second));
+  adjustNeurons();
+}
+
+void StochasticGradientDescent::advanceBatch(sample_batch_t& batch, const sample_list_t& samples, size_t batchSize) const
+{
+  if(batch.second == samples.end())
+  {
+    batch.first = batch.second = samples.begin();
+  }
+  const size_t remaining = std::distance(batch.second, samples.end());
+  batch.first = batch.second;
+  batch.second = (remaining < batchSize) ? samples.end() : std::next(batch.first, batchSize);
+}
+
+bool StochasticGradientDescent::train(const sample_list_t& samples, size_t batchSize, size_t maxEpochs, double epsilon)
 {
   initTraining();
 
-  double prevLoss = 1e9;
-
   bool success(false);
 
-  //auto sampleIdx = std::bind(std::uniform_int_distribution<size_t>(0, samples.size() - 1), std::default_random_engine());
+  for(size_t layerIdx=0; layerIdx < _network.size(); ++layerIdx)
+  {
+    std::cout << _network.layer(layerIdx) << std::endl;
+  }
 
-  for(size_t i=0; i<maxIterations; ++i)
+  if(batchSize > samples.size()) 
+  {
+    batchSize = samples.size();
+  }
+
+  sample_batch_t batch(samples.begin(), samples.end());
+
+  for(size_t i=0; i<maxEpochs; ++i)
   {
     initEpoch();
-    for(size_t j=0; j<samples.size(); ++j) 
-    {
-      learnSample(samples[j]);
-    }
-    adjustNeurons();
+
+    advanceBatch(batch, samples, batchSize);
+    learnBatch(batch);
 
     double totalLoss = _loss->compute(_network, samples);
+
+    if(i % 10000 == 0)
+    {
+      std::cout << "Epoch: " << i << std::endl;
+      for(size_t layerIdx=0; layerIdx < _network.size(); ++layerIdx)
+      {
+        std::cout << _network.layer(layerIdx) << std::endl;
+      }
+      std::cout << "Total Loss: " << totalLoss << std::endl;
+    }
+
     if(totalLoss < epsilon)
     {
       success = true;
       break;
     }
-    // if(maxIterations % 10 == 0)
-    // {
-    //   if(std::abs(totalLoss - prevLoss) < 1e-6)
-    //   {
-    //     break;
-    //   }
-    //   prevLoss = totalLoss;
-    // }
   }
 
   return success;
