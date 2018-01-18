@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include "NetworkOptimization.hpp"
 
 namespace ccml {
@@ -33,6 +35,7 @@ bool NetworkOptimization::train(const sample_list_t& samples, size_t batchSize, 
     learnBatch(batch);
 
     const double totalLoss = _loss->compute(_network, samples);
+    // std::cout << "Total loss " << i << " : " << totalLoss << std::endl;
     if(totalLoss < epsilon)
     {
       success = true;

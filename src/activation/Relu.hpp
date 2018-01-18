@@ -13,7 +13,7 @@ struct Relu
 
   static double df(double y)
   {
-    return 1;
+    return (y > 0) ? 1 : 0;
   }
 };
 
@@ -26,7 +26,7 @@ struct LeakingRelu
 
   static double df(double y)
   {
-    return 1;
+    return (y > 0) ? 1 : -0.1;
   }
 };
 
