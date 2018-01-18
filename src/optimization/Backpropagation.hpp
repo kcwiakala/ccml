@@ -3,8 +3,6 @@
 
 #include "NetworkOptimization.hpp"
 
-#include <Sample.hpp>
-
 namespace ccml {
 
 class Backpropagation: public NetworkOptimization

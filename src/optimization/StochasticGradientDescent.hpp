@@ -1,11 +1,7 @@
 #ifndef CCML_STOCHASTIC_GRADIENT_DESCENT_HPP
 #define CCML_STOCHASTIC_GRADIENT_DESCENT_HPP
 
-#include <Loss.hpp>
-#include <Network.hpp>
-#include <layer/NeuronLayer.hpp>
-#include <Sample.hpp>
-
+// #include <layer/NeuronLayer.hpp>
 #include "Backpropagation.hpp"
 
 namespace ccml {
@@ -27,27 +23,19 @@ public:
 
   virtual ~StochasticGradientDescent();
 
-  bool train(const sample_list_t& samples, size_t batchSize, size_t maxIterations, double epsilon);
+protected:
+  virtual void adjustNeuron(Neuron& neuron, GradientData& gradients, size_t layerIdx, size_t neuronIdx);
 
 protected:
+  virtual void learnBatch(const sample_batch_t& batch);
+
   void learnSample(const Sample& sample);
-
-  void learnBatch(const sample_batch_t& batch);
-
-  void advanceBatch(sample_batch_t& batch, const sample_list_t& samples, size_t batchSize) const;
 
   void updateGradients(const array_t& input, const array_2d_t& activation, const array_2d_t& error);
 
   void normalizeGradients(size_t batchSize);
 
   void adjustNeurons();
-
-protected:
-  virtual void adjustNeuron(Neuron& neuron, GradientData& gradients, size_t layerIdx, size_t neuronIdx);
-
-  virtual void initTraining();
-
-  virtual void initEpoch();
 
 protected:
   const double _rate;

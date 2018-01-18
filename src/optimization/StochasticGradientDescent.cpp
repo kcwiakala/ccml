@@ -27,6 +27,7 @@ StochasticGradientDescent::StochasticGradientDescent(Network& network, const los
   Backpropagation(network, loss), _rate(rate)
 {
   _gradients.resize(_network.size());
+
   for(size_t layerIdx=0; layerIdx < _network.size(); ++layerIdx)
   {
     neuron_layer_ptr_t layer = _network.neuronLayer(layerIdx);
@@ -130,72 +131,6 @@ void StochasticGradientDescent::learnBatch(const sample_batch_t& batch)
   }
   normalizeGradients(std::distance(batch.first, batch.second));
   adjustNeurons();
-}
-
-void StochasticGradientDescent::advanceBatch(sample_batch_t& batch, const sample_list_t& samples, size_t batchSize) const
-{
-  if(batch.second == samples.end())
-  {
-    batch.first = batch.second = samples.begin();
-  }
-  const size_t remaining = std::distance(batch.second, samples.end());
-  batch.first = batch.second;
-  batch.second = (remaining < batchSize) ? samples.end() : std::next(batch.first, batchSize);
-}
-
-bool StochasticGradientDescent::train(const sample_list_t& samples, size_t batchSize, size_t maxEpochs, double epsilon)
-{
-  initTraining();
-
-  bool success(false);
-
-  for(size_t layerIdx=0; layerIdx < _network.size(); ++layerIdx)
-  {
-    std::cout << _network.layer(layerIdx) << std::endl;
-  }
-
-  if(batchSize > samples.size()) 
-  {
-    batchSize = samples.size();
-  }
-
-  sample_batch_t batch(samples.begin(), samples.end());
-
-  for(size_t i=0; i<maxEpochs; ++i)
-  {
-    initEpoch();
-
-    advanceBatch(batch, samples, batchSize);
-    learnBatch(batch);
-
-    double totalLoss = _loss->compute(_network, samples);
-
-    if(i % 10000 == 0)
-    {
-      std::cout << "Epoch: " << i << std::endl;
-      for(size_t layerIdx=0; layerIdx < _network.size(); ++layerIdx)
-      {
-        std::cout << _network.layer(layerIdx) << std::endl;
-      }
-      std::cout << "Total Loss: " << totalLoss << std::endl;
-    }
-
-    if(totalLoss < epsilon)
-    {
-      success = true;
-      break;
-    }
-  }
-
-  return success;
-}
-
-void StochasticGradientDescent::initTraining()
-{
-}
-
-void StochasticGradientDescent::initEpoch()
-{
 }
 
 } // namespace ccml
