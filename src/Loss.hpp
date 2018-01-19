@@ -23,7 +23,7 @@ public:
   virtual value_t error(value_t predicted, value_t expected) const = 0;
 
 public:
-  static loss_ptr_t quadratic();
+  static loss_ptr_t meanSquaredError();
 
   static loss_ptr_t crossEntropy();
 };

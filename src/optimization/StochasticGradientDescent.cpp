@@ -56,10 +56,10 @@ void StochasticGradientDescent::updateGradients(const array_t& input, const arra
       const array_t& layerInput = (layerIdx == 0) ? input : activation[layerIdx - 1];
       layer->splitError(layerInput, error[layerIdx], [&](Neuron& neuron, const array_t& inputError, size_t neuronIdx) {
         GradientData& data = _gradients[layerIdx][neuronIdx];
-        std::transform(inputError.begin(), inputError.end(), 
-            data.weights.begin(), data.weights.begin(), 
-            std::plus<value_t>());
-        data.bias += error[layerIdx][neuronIdx];
+        std::transform(data.weights.begin(), data.weights.end(), 
+            inputError.begin(), data.weights.begin(), 
+            std::minus<value_t>());
+        data.bias -= error[layerIdx][neuronIdx];
       });
     }
   }

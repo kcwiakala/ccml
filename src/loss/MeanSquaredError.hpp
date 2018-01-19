@@ -1,12 +1,12 @@
-#ifndef CCML_LOSS_QUADRATIC_HPP
-#define CCML_LOSS_QUADRATIC_HPP
+#ifndef CCML_LOSS_MEAN_SQUARED_ERROR_HPP
+#define CCML_LOSS_MEAN_SQUARED_ERROR_HPP
 
 #include <Loss.hpp>
 
 namespace ccml {
 namespace loss {
 
-class Quadratic: public Loss
+class MeanSquaredError: public Loss
 {
 public:
   virtual value_t compute(const Network& network, const Sample& sample) const;
@@ -17,4 +17,4 @@ public:
 } // namespace loss
 } // namespace ccml
 
-#endif // CCML_LOSS_QUADRATIC_HPP
+#endif // CCML_LOSS_MEAN_SQUARED_ERROR_HPP

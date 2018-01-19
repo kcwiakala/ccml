@@ -4,12 +4,12 @@
 #include <numeric>
 
 #include <Network.hpp>
-#include <loss/Quadratic.hpp>
+#include <loss/MeanSquaredError.hpp>
 
 namespace ccml {
 namespace loss {
 
-value_t Quadratic::compute(const Network& network, const Sample& sample) const
+value_t MeanSquaredError::compute(const Network& network, const Sample& sample) const
 {
   thread_local static array_t aux;
 
@@ -18,12 +18,12 @@ value_t Quadratic::compute(const Network& network, const Sample& sample) const
   std::transform(aux.begin(), aux.end(), sample.output.begin(), aux.begin(), [](value_t output, value_t expected) {
     return std::pow(expected - output, 2.0) / 2;
   });
-  return std::accumulate(aux.begin(), aux.end(), 0.0);
+  return std::accumulate(aux.begin(), aux.end(), 0.0) / aux.size();
 }
 
-value_t Quadratic::error(value_t predicted, value_t expected) const
+value_t MeanSquaredError::error(value_t predicted, value_t expected) const
 {
-  return (expected - predicted);
+  return (predicted - expected);
 }
 
 } // namespace loss

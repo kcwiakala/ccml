@@ -4,8 +4,8 @@
 #include <Network.hpp>
 #include <Loss.hpp>
 
-#include <loss/Quadratic.hpp>
 #include <loss/CrossEntropy.hpp>
+#include <loss/MeanSquaredError.hpp>
 
 namespace ccml {
 
@@ -16,9 +16,9 @@ value_t Loss::compute(const Network& network, const sample_list_t& samples) cons
   }) / samples.size();
 }
 
-loss_ptr_t Loss::quadratic()
+loss_ptr_t Loss::meanSquaredError()
 {
-  static loss_ptr_t loss(std::make_shared<loss::Quadratic>());
+  static loss_ptr_t loss(std::make_shared<loss::MeanSquaredError>());
   return loss;
 }
 

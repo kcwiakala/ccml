@@ -35,14 +35,12 @@ TEST_F(StochasticGradientDescentTest, simple)
   std::cout << l2 << std::endl;
 
   // l3->init(Initializer::uniform(-0.2, -0.5), Initializer::uniform(-0.2, -0.5));
-
-  _optimizer = std::make_unique<StochasticGradientDescent>(net, Loss::quadratic(), 0.01);
-  // _optimizer = std::make_unique<Momentum>(net, Loss::quadratic(), 0.2, 0.1);
-  _optimizer = std::make_unique<Adam>(net, Loss::crossEntropy(), 0.01);
+  loss_ptr_t loss = Loss::crossEntropy();
+  _optimizer = std::make_unique<StochasticGradientDescent>(net, loss, 0.01);
+  // _optimizer = std::make_unique<Momentum>(net, loss, 0.2, 0.1);
+  _optimizer = std::make_unique<Adam>(net, loss, 0.01);
 
   array_t aux;
-
-  loss_ptr_t loss = Loss::quadratic();
 
   sample_list_t xorSamples = {
     {{1,0}, {1}},
