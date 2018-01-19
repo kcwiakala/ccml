@@ -11,9 +11,9 @@ class Perceptron
 public:
   Perceptron(size_t inputSize);
 
-  void init(const Initializer& weightInit, const Initializer& biasInit);
+  void init(const initializer_t& weightInit, const initializer_t& biasInit);
 
-  void init(const Initializer& initializer);
+  void init(const initializer_t& initializer);
 
   double output(const std::vector<double>& input) const;
 

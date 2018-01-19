@@ -26,17 +26,17 @@ TEST_F(StochasticGradientDescentTest, simple)
   net.push(l2);
   // net.push(l3);
 
-  ccml::Initializer initializer = Initializer::normal(0, 0.5);
-  l1->init(Initializer::uniform(0.5, 1), Initializer::constant(0));
-  l2->init(Initializer::uniform(0.1, 0.3), Initializer::constant(0));
+  l1->init(initializer::uniform(0.5, 1), initializer::constant(0));
+  l2->init(initializer::uniform(0.1, 0.3), initializer::constant(0));
+
   // l3->init(initializer, initializer);
 
   std::cout << l1 << std::endl;
   std::cout << l2 << std::endl;
 
   // l3->init(Initializer::uniform(-0.2, -0.5), Initializer::uniform(-0.2, -0.5));
-  loss_ptr_t loss = Loss::crossEntropy();
-  _optimizer = std::make_unique<StochasticGradientDescent>(net, loss, 0.01);
+  loss_ptr_t loss = Loss::meanSquaredError();
+  // _optimizer = std::make_unique<StochasticGradientDescent>(net, loss, 0.01);
   // _optimizer = std::make_unique<Momentum>(net, loss, 0.2, 0.1);
   _optimizer = std::make_unique<Adam>(net, loss, 0.01);
 

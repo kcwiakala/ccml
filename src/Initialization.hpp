@@ -3,32 +3,21 @@
 
 #include <functional>
 
+#include <Types.hpp>
+
 namespace ccml {
 
-class Initializer 
-{
-public:
-  typedef std::function<double()> generator_t;
-  
-  Initializer(const double value);
+using initializer_t = std::function<value_t()>;
 
-  Initializer(const generator_t&& generator): _generator(generator) {}
+namespace initializer {
 
-  static Initializer constant(double value);
+initializer_t constant(value_t value);
 
-  static Initializer uniform(double min, double max);  
+initializer_t uniform(value_t min, value_t max);
 
-  static Initializer normal(double mean, double sigma);
+initializer_t normal(value_t mean, value_t sigma);
 
-  generator_t::result_type operator()() const
-  {
-    return _generator();
-  }
-
-private:
-  generator_t _generator;
-};
-
+} // namespace initializer
 } // namespace ccml
 
 #endif 

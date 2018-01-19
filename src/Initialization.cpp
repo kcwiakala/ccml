@@ -3,34 +3,31 @@
 #include "Initialization.hpp"
 
 namespace ccml {
+namespace initializer {
+  
 namespace {
 
-std::random_device r;
+std::random_device randomDevice;
+std::default_random_engine randomEngine(randomDevice());
 
 } // namespace
 
-Initializer::Initializer(const double value): 
-  _generator([=](){
-    return value;
-  })
+initializer_t constant(value_t value)
 {
+  return [=]() { 
+    return value; 
+  };
 }
 
-Initializer Initializer::constant(double value)
+initializer_t uniform(value_t min, value_t max)
 {
-  return Initializer(value);
+  return std::bind(std::uniform_real_distribution<value_t>(min, max), std::ref(randomEngine));
 }
 
-Initializer Initializer::uniform(double min, double max)
+initializer_t normal(value_t mean, value_t sigma)
 {
-  auto generator = std::bind(std::uniform_real_distribution<double>(min, max), std::default_random_engine(r()));
-  return Initializer(generator);
+  return std::bind(std::normal_distribution<value_t>(mean, sigma), std::ref(randomEngine));
 }
 
-Initializer Initializer::normal(double mean, double sigma)
-{
-  auto generator = std::bind(std::normal_distribution<double>(mean, sigma), std::default_random_engine(r()));
-  return Initializer(generator);
-}
-
+} // namespace initializer
 } // namespace ccml

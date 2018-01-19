@@ -43,7 +43,7 @@ void NeuronLayer::forEachNeuron(const neuron_reader_t& reader) const
   indexed_for_each(_neurons.begin(), _neurons.end(), reader);
 }
 
-void NeuronLayer::init(const Initializer& weightInit, const Initializer& biasInit)
+void NeuronLayer::init(const initializer_t& weightInit, const initializer_t& biasInit)
 {
   std::for_each(_neurons.begin(), _neurons.end(), std::bind(&Neuron::init, _1, std::cref(weightInit), std::cref(biasInit)));
 }

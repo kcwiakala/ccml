@@ -31,7 +31,7 @@ public:
 
   void forEachNeuron(const neuron_reader_t& reader) const;
 
-  void init(const Initializer& weightInit, const Initializer& biasInit);
+  void init(const initializer_t& weightInit, const initializer_t& biasInit);
 
   virtual void toStream(std::ostream& stream) const;
 

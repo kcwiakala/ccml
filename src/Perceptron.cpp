@@ -12,12 +12,12 @@ Perceptron::Perceptron(size_t inputSize):
 {
 }
 
-void Perceptron::init(const Initializer& weightInit, const Initializer& biasInit)
+void Perceptron::init(const initializer_t& weightInit, const initializer_t& biasInit)
 {
   _neuron.init(weightInit, biasInit);
 }
 
-void Perceptron::init(const Initializer& initializer)
+void Perceptron::init(const initializer_t& initializer)
 {
   init(initializer, initializer);
 }

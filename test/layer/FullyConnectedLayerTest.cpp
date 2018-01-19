@@ -33,7 +33,7 @@ TEST_F(FullyConnectedLayerTest, input_size)
 TEST_F(FullyConnectedLayerTest, activation)
 {
   _layer.reset(new FullyConnectedLayer(3, 2, Activation::relu()));
-  _layer->init(Initializer::constant(0.0), Initializer::constant(0.0));
+  _layer->init(initializer::constant(0.0), initializer::constant(0.0));
 
   _layer->forEachNeuron([](Neuron& n, size_t idx){
     if(idx == 0) 

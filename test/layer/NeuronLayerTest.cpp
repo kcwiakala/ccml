@@ -51,7 +51,7 @@ TEST_F(NeuronLayerTest, neuron_initialization)
 {
   _layer.reset(new NeuronLayerMock(3,2,Activation::heaviside()));
 
-  _layer->init(Initializer::constant(87), Initializer::constant(5));
+  _layer->init(initializer::constant(87), initializer::constant(5));
   _layer->forEachNeuron([](const Neuron& n, auto) {
     EXPECT_NEAR(n.bias(), 5.0, 1e-6);
     std::for_each(n.weights().begin(), n.weights().end(), [](double w) {

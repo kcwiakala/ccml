@@ -19,7 +19,7 @@ public:
 public:
   size_t size() const;
 
-  void init(const Initializer& weightInit, const Initializer& biasInit);
+  void init(const initializer_t& weightInit, const initializer_t& biasInit);
 
   value_t output(const array_t& input) const;
 

@@ -4,52 +4,29 @@
 
 #include <Initialization.hpp>
 
-TEST(InitializationTest, value_constructor) 
+TEST(InitializationTest, constant)
 {
-  ccml::Initializer gen(28.1);
-  
-  for(int i=0; i < 100; ++i) 
-  {
-    EXPECT_NEAR(28.1, gen(), 0.0000001);
-  }
-}
-
-TEST(InitializationTest, generator_constructor)
-{
-  int k = 24;
-  ccml::Initializer gen([&]() {
-    return k++;
-  });
-
-  for(int i=0; i < 100; ++i) 
-  {
-    EXPECT_NEAR(i + 24, gen(), 0.0000001);
-  }
-}
-
-TEST(InitializationTest, constant_initializer)
-{
-  ccml::Initializer gen(ccml::Initializer::constant(8));
+  ccml::initializer_t gen = ccml::initializer::constant(8.0);
 
   for(int i=0; i < 100; ++i) 
   {
     EXPECT_NEAR(8.0, gen(), 0.0000001);
   }
 
-  gen = ccml::Initializer::constant(23);
+  gen = ccml::initializer::constant(23);
   EXPECT_NEAR(23.0, gen(), 0.0000001);
 
-  gen = ccml::Initializer::constant(4837.234);
+  gen = ccml::initializer::constant(4837.234);
   EXPECT_NEAR(4837.234, gen(), 0.0000001);
 }
 
-TEST(InitializationTest, uniform_initializer)
+TEST(InitializationTest, uniform)
 {
   const double min = 234;
   const double max = 298;
   const double num = 10000;
 
-  ccml::Initializer gen = ccml::Initializer::uniform(min, max);
+  ccml::initializer_t gen = ccml::initializer::uniform(min, max);
   std::vector<double> results;
   results.reserve(num);
 
@@ -64,13 +41,13 @@ TEST(InitializationTest, uniform_initializer)
   EXPECT_NEAR((sum / num), min + (max - min) / 2, (max - min) / 100);  
 }
 
-TEST(InitializationTest, normal_initializer)
+TEST(InitializationTest, normal)
 {
   const double mean = 23;
   const double sigma = 81;
   const double num = 10000;
 
-  ccml::Initializer gen = ccml::Initializer::normal(mean, sigma);
+  ccml::initializer_t gen = ccml::initializer::normal(mean, sigma);
   std::vector<double> results;
   results.reserve(num);
 

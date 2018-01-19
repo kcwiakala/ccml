@@ -17,7 +17,7 @@ TEST_F(NeuronTest, construction_test)
 
   std::cout << n << std::endl;
 
-  n.init(Initializer::uniform(-3,1.2), Initializer::normal(0,1));
+  n.init(initializer::uniform(-3,1.2), initializer::normal(0,1));
   std::cout << n << std::endl;
 }
 

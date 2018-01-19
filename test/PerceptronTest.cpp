@@ -15,7 +15,7 @@ class PerceptronTest: public testing::Test
 protected:
   PerceptronTest(): _sut(new Perceptron(2))
   {
-    _sut->init(Initializer::uniform(0.1, 0.9));
+    _sut->init(initializer::uniform(0.1, 0.9));
   }
 protected:
   std::unique_ptr<Perceptron> _sut;
