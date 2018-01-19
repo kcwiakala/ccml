@@ -5,6 +5,7 @@
 #include <Loss.hpp>
 
 #include <loss/Quadratic.hpp>
+#include <loss/CrossEntropy.hpp>
 
 namespace ccml {
 
@@ -18,6 +19,12 @@ value_t Loss::compute(const Network& network, const sample_list_t& samples) cons
 loss_ptr_t Loss::quadratic()
 {
   static loss_ptr_t loss(std::make_shared<loss::Quadratic>());
+  return loss;
+}
+
+loss_ptr_t Loss::crossEntropy()
+{
+  static loss_ptr_t loss(std::make_shared<loss::CrossEntropy>());
   return loss;
 }
 

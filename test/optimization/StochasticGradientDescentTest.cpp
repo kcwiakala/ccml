@@ -38,7 +38,7 @@ TEST_F(StochasticGradientDescentTest, simple)
 
   _optimizer = std::make_unique<StochasticGradientDescent>(net, Loss::quadratic(), 0.01);
   // _optimizer = std::make_unique<Momentum>(net, Loss::quadratic(), 0.2, 0.1);
-  _optimizer = std::make_unique<Adam>(net, Loss::quadratic(), 0.01);
+  _optimizer = std::make_unique<Adam>(net, Loss::crossEntropy(), 0.01);
 
   array_t aux;
 

@@ -24,6 +24,8 @@ public:
 
 public:
   static loss_ptr_t quadratic();
+
+  static loss_ptr_t crossEntropy();
 };
 
 } // namespace ccml
