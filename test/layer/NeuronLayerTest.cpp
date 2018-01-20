@@ -19,6 +19,7 @@ public:
   MOCK_CONST_METHOD0(inputSize, size_t());
   MOCK_CONST_METHOD2(output, void(const array_t&, array_t&));
   MOCK_CONST_METHOD2(backpropagate, void(const array_t&, array_t&));
+  MOCK_CONST_METHOD3(splitError, void(const array_t&, const array_t&, const error_reader_t&));
 };
 
 class NeuronLayerTest: public testing::Test
@@ -49,9 +50,9 @@ TEST_F(NeuronLayerTest, neuron_initialization)
 
   for(size_t i=0; i<_layer->size(); ++i)
   {
-    const auto& neuron = _layer->neuron(i);
-    EXPECT_NEAR(neuron.bias(), 5.0, 1e-6);
-    std::for_each(neuron.weights().begin(), neuron.weights().end(), [](double w) {
+    const auto& node = _layer->node(i);
+    EXPECT_NEAR(node.bias(), 5.0, 1e-6);
+    std::for_each(node.weights().begin(), node.weights().end(), [](double w) {
       EXPECT_NEAR(w, 87.0, 1e-6);
     });
   }

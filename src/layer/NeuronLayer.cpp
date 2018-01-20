@@ -12,7 +12,7 @@ using namespace std::placeholders;
 NeuronLayer::NeuronLayer(const std::string& type, size_t layerSize, size_t neuronSize, const Transfer& transfer):
   TypedLayer(type),
   _transfer(transfer),
-  _neurons(layerSize, Neuron(neuronSize, _transfer))
+  _nodes(layerSize, Node(neuronSize))
 {
 }
 
@@ -29,39 +29,35 @@ void NeuronLayer::error(const array_t& y, const array_t& dy, array_t& e) const
   });
 }
 
-void NeuronLayer::splitError(const array_t& x, const array_t& error, const neuron_adjuster_t& adjuster)
-{
-}
-
 void NeuronLayer::init(const initializer_t& weightInit, const initializer_t& biasInit)
 {
-  std::for_each(_neurons.begin(), _neurons.end(), std::bind(&Neuron::init, _1, std::cref(weightInit), std::cref(biasInit)));
+  std::for_each(_nodes.begin(), _nodes.end(), std::bind(&Neuron::init, _1, std::cref(weightInit), std::cref(biasInit)));
 }
 
 size_t NeuronLayer::size() const
 {
-  return _neurons.size();
+  return _nodes.size();
 }
 
-const Neuron& NeuronLayer::neuron(size_t idx) const
+const Node& NeuronLayer::node(size_t idx) const
 {
-  return _neurons[idx];
+  return _nodes[idx];
 }
 
-Neuron& NeuronLayer::neuron(size_t idx)
+Node& NeuronLayer::node(size_t idx)
 {
-  return _neurons[idx];
+  return _nodes[idx];
 }
 
 void NeuronLayer::toStream(std::ostream& stream) const
 {
   stream << type() << ":{is:" << inputSize() << ",os:" << outputSize();
   stream << ",n:[";
-  for(size_t i=0; i<_neurons.size(); ++i) 
+  for(size_t i=0; i<_nodes.size(); ++i) 
   {
-    stream << ((i>0) ? "," : "") << _neurons[i];
+    stream << ((i>0) ? "," : "") << _nodes[i];
   }
-  stream << "]}";
+  stream << "],t:" << _transfer.name << "}";
 }
 
 } // namespace ccml

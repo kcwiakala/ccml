@@ -27,7 +27,7 @@ TEST_F(FullyConnectedLayerTest, input_size)
 
   for(size_t i=0; i<_layer->size(); ++i)
   {
-    EXPECT_EQ(_layer->neuron(i).size(), 18);
+    EXPECT_EQ(_layer->node(i).size(), 18);
   }
 }
 
@@ -37,8 +37,8 @@ TEST_F(FullyConnectedLayerTest, activation)
   _layer->init(initializer::constant(0.0), initializer::constant(0.0));
 
   ASSERT_EQ(_layer->size(), 2u);
-  _layer->neuron(0).adjust({1,2,3}, 17);
-  _layer->neuron(1).adjust({4,5,6}, 33);
+  _layer->node(0).adjust({1,2,3}, 17);
+  _layer->node(1).adjust({4,5,6}, 33);
 
   array_t x = {3,6,2};
   array_t y;

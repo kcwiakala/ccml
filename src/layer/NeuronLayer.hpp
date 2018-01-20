@@ -12,7 +12,7 @@ namespace ccml {
 class NeuronLayer: public TypedLayer
 {
 public:
-  typedef std::function<void(Neuron&, const array_t&, size_t)> neuron_adjuster_t;
+  typedef std::function<void(const array_t&, size_t)> error_reader_t;
 
 public:
   virtual ~NeuronLayer() {}
@@ -21,7 +21,7 @@ public:
 
   virtual void error(const array_t& y, const array_t& dy, array_t& e) const;
 
-  virtual void splitError(const array_t& x, const array_t& error, const neuron_adjuster_t& adjuster);
+  virtual void splitError(const array_t& x, const array_t& error, const error_reader_t& reader) const = 0;
 
   void init(const initializer_t& weightInit, const initializer_t& biasInit);
 
@@ -30,17 +30,17 @@ public:
 public:
   size_t size() const;
 
-  const Neuron& neuron(size_t idx) const;
+  const Node& node(size_t idx) const;
 
-  Neuron& neuron(size_t idx);
+  Node& node(size_t idx);
 
 protected:
   NeuronLayer(const std::string& type, size_t layerSize, size_t neuronSize, const Transfer& transfer);
 
 protected:
   const Transfer _transfer;
-  typedef std::vector<Neuron> neuron_list_t;
-  neuron_list_t _neurons;
+  using node_list_t = std::vector<Node>;
+  node_list_t _nodes;
 };
 
 typedef std::shared_ptr<NeuronLayer> neuron_layer_ptr_t;

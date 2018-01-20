@@ -7,12 +7,12 @@
 
 namespace ccml {
 
-AdamNeuronData::AdamNeuronData(const Neuron& neuron):
-  mW(neuron.size(), 0.0), mB(0.0), vW(neuron.size(), 0.0), vB(0.0)
+AdamNodeData::AdamNodeData(const Node& node):
+  mW(node.size(), 0.0), mB(0.0), vW(node.size(), 0.0), vB(0.0)
 {
 }
 
-void AdamNeuronData::reset()
+void AdamNodeData::reset()
 {
   mB = 0.0;
   std::fill(mW.begin(), mW.end(), 0.0);
@@ -27,9 +27,9 @@ Adam::Adam(Network& network, const loss_ptr_t& loss, double rate, double beta1, 
 { 
 }
 
-void Adam::adjustNeuron(Neuron& neuron, GradientData& gradients, size_t layerIdx, size_t neuronIdx)
+void Adam::adjustNode(Node& node, GradientData& gradients, size_t layerIdx, size_t nodeIdx)
 {
-  AdamNeuronData& data = neuronData(layerIdx, neuronIdx);
+  AdamNodeData& data = nodeData(layerIdx, nodeIdx);
 
   for(size_t i=0; i<gradients.weights.size(); ++i)
   {
@@ -42,7 +42,7 @@ void Adam::adjustNeuron(Neuron& neuron, GradientData& gradients, size_t layerIdx
   data.vB = _beta2 * data.vB + (1 - _beta2) * std::pow(gradients.bias, 2);
   gradients.bias = _lr * data.mB / (std::sqrt(data.vB + _epsilon));
 
-  neuron.adjust(gradients.weights, gradients.bias);
+  node.adjust(gradients.weights, gradients.bias);
 }
 
 void Adam::initTraining()

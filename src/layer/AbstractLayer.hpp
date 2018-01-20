@@ -13,13 +13,13 @@ class AbstractLayer: public Serializable
 public:
   virtual ~AbstractLayer() {}
 
-  //virtual const std::string& type() const = 0;
-
   virtual size_t inputSize() const = 0;
 
   virtual size_t outputSize() const = 0;
 
   virtual void output(const array_t& x, array_t& y) const = 0;
+
+  virtual void error(const array_t& y, const array_t& dy, array_t& e) const = 0;
 
   virtual void backpropagate(const array_t& error, array_t& inputError) const = 0;
 };

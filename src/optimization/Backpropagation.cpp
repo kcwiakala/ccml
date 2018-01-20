@@ -30,8 +30,11 @@ void Backpropagation::feed(const Sample& sample, array_2d_t& activation, array_t
   const array_t& output = activation.back();
   error.resize(output.size());
 
-  std::transform(output.begin(), output.end(), sample.output.begin(), error.begin(), 
-      std::bind(&Loss::error, _loss, _1, _2));
+  // Calclate error on output layer
+  std::transform(output.begin(), output.end(), sample.output.begin(), error.begin(), [&](value_t predicted, value_t expected) {
+    return _loss->error(predicted, expected);
+  });
+    
 }
 
 void Backpropagation::backpropagate(const array_2d_t& activation, array_2d_t& error) const
@@ -41,16 +44,15 @@ void Backpropagation::backpropagate(const array_2d_t& activation, array_2d_t& er
   size_t layerIdx = _network.size();
   while(layerIdx-- > 0)
   {
-    neuron_layer_ptr_t neuronLayer = _network.neuronLayer(layerIdx);
-    if(neuronLayer)
-    {
-        // Calculate error term for the neuron layer
-        neuronLayer->error(activation[layerIdx], error[layerIdx], aux);
-        error[layerIdx].swap(aux);
-    }
+    layer_ptr_t layer = _network.layer(layerIdx);
+
+    // Calculate error term for the neuron layer
+    layer->error(activation[layerIdx], error[layerIdx], aux);
+    error[layerIdx].swap(aux);
+
     if(layerIdx > 0)
     {
-      _network.layer(layerIdx)->backpropagate(error[layerIdx], error[layerIdx-1]);
+      layer->backpropagate(error[layerIdx], error[layerIdx-1]);
     }
   }
 }

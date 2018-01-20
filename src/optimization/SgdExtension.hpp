@@ -8,58 +8,58 @@
 
 namespace ccml {
 
-template<typename NeuronData>
+template<typename NodeData>
 class SgdExtension: public StochasticGradientDescent
 {
 protected:
   SgdExtension(Network& network, const loss_ptr_t& loss, double rate);
 
-  const NeuronData& neuronData(size_t layerIdx, size_t neuronIdx) const;
+  const NodeData& nodeData(size_t layerIdx, size_t nodeIdx) const;
 
-  NeuronData& neuronData(size_t layerIdx, size_t neuronIdx);
+  NodeData& nodeData(size_t layerIdx, size_t nodeIdx);
 
   virtual void initTraining();
 
 private:
-  vector_2d<NeuronData> _neuronData;
+  vector_2d<NodeData> _nodeData;
 };
 
-template<typename NeuronData>
-SgdExtension<NeuronData>::SgdExtension(Network& network, const loss_ptr_t& loss, double rate):
+template<typename NodeData>
+SgdExtension<NodeData>::SgdExtension(Network& network, const loss_ptr_t& loss, double rate):
   StochasticGradientDescent(network, loss, rate)
 {
-  _neuronData.resize(_network.size());
+  _nodeData.resize(_network.size());
   for(size_t layerIdx=0; layerIdx < _network.size(); ++layerIdx)
   {
     neuron_layer_ptr_t layer = _network.neuronLayer(layerIdx);
     if(layer)
     {
-      _neuronData[layerIdx].reserve(layer->size());
-      for(size_t neuronIdx=0; neuronIdx < layer->size(); ++neuronIdx)
+      _nodeData[layerIdx].reserve(layer->size());
+      for(size_t nodeIdx=0; nodeIdx < layer->size(); ++nodeIdx)
       {
-        _neuronData[layerIdx].emplace_back(NeuronData(layer->neuron(neuronIdx)));
+        _nodeData[layerIdx].emplace_back(NodeData(layer->node(nodeIdx)));
       }
     }
   }
 }
 
-template<typename NeuronData>
-const NeuronData& SgdExtension<NeuronData>::neuronData(size_t layerIdx, size_t neuronIdx) const
+template<typename NodeData>
+const NodeData& SgdExtension<NodeData>::nodeData(size_t layerIdx, size_t nodeIdx) const
 {
-  return _neuronData[layerIdx][neuronIdx];
+  return _nodeData[layerIdx][nodeIdx];
 }
 
-template<typename NeuronData>
-NeuronData& SgdExtension<NeuronData>::neuronData(size_t layerIdx, size_t neuronIdx)
+template<typename NodeData>
+NodeData& SgdExtension<NodeData>::nodeData(size_t layerIdx, size_t nodeIdx)
 {
-  return _neuronData[layerIdx][neuronIdx];
+  return _nodeData[layerIdx][nodeIdx];
 }
 
-template<typename NeuronData>
-void SgdExtension<NeuronData>::initTraining()
+template<typename NodeData>
+void SgdExtension<NodeData>::initTraining()
 {
-  std::for_each(_neuronData.begin(), _neuronData.end(), [](auto& layerData) {
-    std::for_each(layerData.begin(), layerData.end(), std::bind(&NeuronData::reset, std::placeholders::_1));
+  std::for_each(_nodeData.begin(), _nodeData.end(), [](auto& layerData) {
+    std::for_each(layerData.begin(), layerData.end(), std::bind(&NodeData::reset, std::placeholders::_1));
   });
 }
 

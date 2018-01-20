@@ -7,13 +7,13 @@ namespace ccml {
 
 using namespace std::placeholders;
 
-MomentumNeuronData::MomentumNeuronData(const Neuron& neuron):
-  deltaWeight(neuron.size(), 0.0),
+MomentumNodeData::MomentumNodeData(const Node& node):
+  deltaWeight(node.size(), 0.0),
   deltaBias(0.0)
 {
 }
 
-void MomentumNeuronData::reset()
+void MomentumNodeData::reset()
 {
   deltaBias = 0.0;
   std::fill(deltaWeight.begin(), deltaWeight.end(), 0.0);
@@ -25,9 +25,9 @@ Momentum::Momentum(Network& network, const loss_ptr_t& loss, double rate, double
 {    
 }
 
-void Momentum::adjustNeuron(Neuron& neuron, GradientData& gradients, size_t layerIdx, size_t neuronIdx)
+void Momentum::adjustNode(Node& node, GradientData& gradients, size_t layerIdx, size_t nodeIdx)
 {
-  MomentumNeuronData& data = neuronData(layerIdx, neuronIdx);
+  MomentumNodeData& data = nodeData(layerIdx, nodeIdx);
   
   const array_t& wg = gradients.weights;
   array_t& dw = data.deltaWeight;
@@ -36,7 +36,7 @@ void Momentum::adjustNeuron(Neuron& neuron, GradientData& gradients, size_t laye
   });
   data.deltaBias = gradients.bias * _rate + data.deltaBias * _momentum;
 
-  neuron.adjust(data.deltaWeight, data.deltaBias);
+  node.adjust(data.deltaWeight, data.deltaBias);
 }
 
 } // namespace ccml

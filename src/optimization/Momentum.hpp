@@ -5,9 +5,9 @@
 
 namespace ccml {
 
-struct MomentumNeuronData
+struct MomentumNodeData
 {
-  MomentumNeuronData(const Neuron& neuron);
+  MomentumNodeData(const Node& node);
 
   void reset();
 
@@ -15,7 +15,7 @@ struct MomentumNeuronData
   value_t deltaBias;
 };
 
-class Momentum: public SgdExtension<MomentumNeuronData>
+class Momentum: public SgdExtension<MomentumNodeData>
 {
 public:
   Momentum(Network& network, const loss_ptr_t& loss, double rate, double momentum);
@@ -23,7 +23,7 @@ public:
   virtual ~Momentum() {}
 
 protected:
-  virtual void adjustNeuron(Neuron& neuron, GradientData& gradients, size_t layerIdx, size_t neuronIdx);
+  virtual void adjustNode(Node& node, GradientData& gradients, size_t layerIdx, size_t neuronIdx);
 
 private:
   const double _momentum;

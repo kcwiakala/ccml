@@ -11,8 +11,8 @@ namespace ccml {
 
 using namespace std::placeholders;
 
-GradientData::GradientData(const Neuron& neuron):
-  weights(neuron.size(), 0.0),
+GradientData::GradientData(const Node& node):
+  weights(node.size(), 0.0),
   bias(0.0)
 {
 }
@@ -34,9 +34,9 @@ StochasticGradientDescent::StochasticGradientDescent(Network& network, const los
     if(layer)
     {
       _gradients[layerIdx].reserve(layer->size());
-      for(size_t neuronIdx=0; neuronIdx < layer->size(); ++neuronIdx)
+      for(size_t nodeIdx=0; nodeIdx < layer->size(); ++nodeIdx)
       {
-        _gradients[layerIdx].emplace_back(GradientData(layer->neuron(neuronIdx)));
+        _gradients[layerIdx].emplace_back(GradientData(layer->node(nodeIdx)));
       }
     }
   }
@@ -54,12 +54,12 @@ void StochasticGradientDescent::updateGradients(const array_t& input, const arra
     if(layer)
     {
       const array_t& layerInput = (layerIdx == 0) ? input : activation[layerIdx - 1];
-      layer->splitError(layerInput, error[layerIdx], [&](Neuron& neuron, const array_t& inputError, size_t neuronIdx) {
-        GradientData& data = _gradients[layerIdx][neuronIdx];
+      layer->splitError(layerInput, error[layerIdx], [&](const array_t& inputError, size_t nodeIdx) {
+        GradientData& data = _gradients[layerIdx][nodeIdx];
         std::transform(data.weights.begin(), data.weights.end(), 
             inputError.begin(), data.weights.begin(), 
             std::minus<value_t>());
-        data.bias -= error[layerIdx][neuronIdx];
+        data.bias -= error[layerIdx][nodeIdx];
       });
     }
   }
@@ -72,9 +72,9 @@ void StochasticGradientDescent::normalizeGradients(size_t batchSize)
     neuron_layer_ptr_t layer = _network.neuronLayer(layerIdx);
     if(layer)
     {
-      for(size_t neuronIdx=0; neuronIdx < layer->size(); ++neuronIdx)
+      for(size_t nodeIdx=0; nodeIdx < layer->size(); ++nodeIdx)
       {
-        GradientData& gradients = _gradients[layerIdx][neuronIdx];
+        GradientData& gradients = _gradients[layerIdx][nodeIdx];
         std::transform(gradients.weights.begin(), gradients.weights.end(), gradients.weights.begin(), [=](value_t g) {
           return g / batchSize;
         });
@@ -84,30 +84,30 @@ void StochasticGradientDescent::normalizeGradients(size_t batchSize)
   }
 }
 
-void StochasticGradientDescent::adjustNeurons()
+void StochasticGradientDescent::adjustNodes()
 {
   for(size_t layerIdx=0; layerIdx < _network.size(); ++layerIdx)
   {
     neuron_layer_ptr_t layer = _network.neuronLayer(layerIdx);
     if(layer)
     {
-      for(size_t neuronIdx=0; neuronIdx < layer->size(); ++neuronIdx)
+      for(size_t nodeIdx=0; nodeIdx < layer->size(); ++nodeIdx)
       {
-        GradientData& gradients = _gradients[layerIdx][neuronIdx];
-        adjustNeuron(layer->neuron(neuronIdx), gradients, layerIdx, neuronIdx);
+        GradientData& gradients = _gradients[layerIdx][nodeIdx];
+        adjustNode(layer->node(nodeIdx), gradients, layerIdx, nodeIdx);
         gradients.reset();
       }
     }
   }
 }
 
-void StochasticGradientDescent::adjustNeuron(Neuron& neuron, GradientData& gradients, size_t layerIdx, size_t neuronIdx)
+void StochasticGradientDescent::adjustNode(Node& node, GradientData& gradients, size_t layerIdx, size_t nodeIdx)
 {
   array_t& wg = gradients.weights;
   std::transform(wg.begin(), wg.end(), wg.begin(), [this](value_t wgi) {
     return wgi * _rate;
   });
-  neuron.adjust(wg, gradients.bias * _rate);
+  node.adjust(wg, gradients.bias * _rate);
 }
 
 void StochasticGradientDescent::learnSample(const Sample& sample)
@@ -130,7 +130,7 @@ void StochasticGradientDescent::learnBatch(const sample_batch_t& batch)
     learnSample(*iter++);
   }
   normalizeGradients(std::distance(batch.first, batch.second));
-  adjustNeurons();
+  adjustNodes();
 }
 
 } // namespace ccml

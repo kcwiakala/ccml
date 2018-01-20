@@ -5,9 +5,9 @@
 
 namespace ccml {
 
-struct AdamNeuronData
+struct AdamNodeData
 {
-  AdamNeuronData(const Neuron& neuron);
+  AdamNodeData(const Node& node);
 
   void reset();
 
@@ -17,7 +17,7 @@ struct AdamNeuronData
   value_t vB;
 };
 
-class Adam: public SgdExtension<AdamNeuronData>
+class Adam: public SgdExtension<AdamNodeData>
 {
 public:
   Adam(Network& network, const loss_ptr_t& loss, double rate, double beta1 = 0.9, double beta2 = 0.999, double epsilon = 1e-8);
@@ -25,7 +25,7 @@ public:
   virtual ~Adam() {}
 
 protected:
-  virtual void adjustNeuron(Neuron& neuron, GradientData& gradients, size_t layerIdx, size_t neuronIdx);
+  virtual void adjustNode(Node& node, GradientData& gradients, size_t layerIdx, size_t neuronIdx);
 
   virtual void initTraining();
 
