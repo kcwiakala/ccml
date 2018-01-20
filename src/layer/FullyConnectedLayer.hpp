@@ -12,7 +12,7 @@ public:
 
   virtual size_t inputSize() const;
 
-  virtual void output(const array_t& x, array_t& y);
+  virtual void output(const array_t& x, array_t& y) const;
 
   virtual void backpropagate(const array_t& error, array_t& inputError) const;
 
