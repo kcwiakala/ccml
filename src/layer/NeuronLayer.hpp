@@ -12,10 +12,6 @@ namespace ccml {
 class NeuronLayer: public TypedLayer
 {
 public:
-  typedef std::function<void(Neuron&, size_t)> neuron_updater_t;
-
-  typedef std::function<void(const Neuron&, size_t)> neuron_reader_t;
-
   typedef std::function<void(Neuron&, const array_t&, size_t)> neuron_adjuster_t;
 
 public:
@@ -26,10 +22,6 @@ public:
   virtual void error(const array_t& y, const array_t& dy, array_t& e) const;
 
   virtual void splitError(const array_t& x, const array_t& error, const neuron_adjuster_t& adjuster);
-
-  void forEachNeuron(const neuron_updater_t& updater);
-
-  void forEachNeuron(const neuron_reader_t& reader) const;
 
   void init(const initializer_t& weightInit, const initializer_t& biasInit);
 

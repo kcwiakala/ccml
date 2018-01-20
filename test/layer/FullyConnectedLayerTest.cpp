@@ -25,9 +25,10 @@ TEST_F(FullyConnectedLayerTest, input_size)
 
   EXPECT_EQ(_layer->inputSize(), 18);
 
-  _layer->forEachNeuron([](const Neuron& n, auto){
-    EXPECT_EQ(n.size(), 18);
-  });
+  for(size_t i=0; i<_layer->size(); ++i)
+  {
+    EXPECT_EQ(_layer->neuron(i).size(), 18);
+  }
 }
 
 TEST_F(FullyConnectedLayerTest, activation)
@@ -35,16 +36,9 @@ TEST_F(FullyConnectedLayerTest, activation)
   _layer.reset(new FullyConnectedLayer(3, 2, transfer::relu()));
   _layer->init(initializer::constant(0.0), initializer::constant(0.0));
 
-  _layer->forEachNeuron([](Neuron& n, size_t idx){
-    if(idx == 0) 
-    {
-      n.adjust({1,2,3}, 17);
-    }
-    else
-    {
-      n.adjust({4,5,6}, 33);
-    }
-  });
+  ASSERT_EQ(_layer->size(), 2u);
+  _layer->neuron(0).adjust({1,2,3}, 17);
+  _layer->neuron(1).adjust({4,5,6}, 33);
 
   array_t x = {3,6,2};
   array_t y;

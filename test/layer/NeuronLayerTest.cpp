@@ -38,13 +38,7 @@ TEST_F(NeuronLayerTest, number_of_neurons)
   _layer.reset(new NeuronLayerMock(6, 2, transfer::heaviside()));
 
   EXPECT_EQ(_layer->outputSize(), 6u);
-
-  size_t count(0);
-  _layer->forEachNeuron([&](Neuron&, size_t idx) {
-    EXPECT_EQ(count, idx);
-    ++count;
-  });
-  EXPECT_EQ(count, 6u);
+  EXPECT_EQ(_layer->size(), 6u);
 }
 
 TEST_F(NeuronLayerTest, neuron_initialization)
@@ -52,12 +46,15 @@ TEST_F(NeuronLayerTest, neuron_initialization)
   _layer.reset(new NeuronLayerMock(3,2,transfer::heaviside()));
 
   _layer->init(initializer::constant(87), initializer::constant(5));
-  _layer->forEachNeuron([](const Neuron& n, auto) {
-    EXPECT_NEAR(n.bias(), 5.0, 1e-6);
-    std::for_each(n.weights().begin(), n.weights().end(), [](double w) {
+
+  for(size_t i=0; i<_layer->size(); ++i)
+  {
+    const auto& neuron = _layer->neuron(i);
+    EXPECT_NEAR(neuron.bias(), 5.0, 1e-6);
+    std::for_each(neuron.weights().begin(), neuron.weights().end(), [](double w) {
       EXPECT_NEAR(w, 87.0, 1e-6);
     });
-  });
+  }
 }
 
 } // namespace ccml

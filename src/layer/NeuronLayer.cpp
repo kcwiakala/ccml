@@ -33,16 +33,6 @@ void NeuronLayer::splitError(const array_t& x, const array_t& error, const neuro
 {
 }
 
-void NeuronLayer::forEachNeuron(const neuron_updater_t& updater)
-{
-  indexed_for_each(_neurons.begin(), _neurons.end(), updater);
-}
-
-void NeuronLayer::forEachNeuron(const neuron_reader_t& reader) const
-{
-  indexed_for_each(_neurons.begin(), _neurons.end(), reader);
-}
-
 void NeuronLayer::init(const initializer_t& weightInit, const initializer_t& biasInit)
 {
   std::for_each(_neurons.begin(), _neurons.end(), std::bind(&Neuron::init, _1, std::cref(weightInit), std::cref(biasInit)));
