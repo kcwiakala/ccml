@@ -9,36 +9,14 @@
 namespace ccml {
 
 Neuron::Neuron(size_t inputSize, const Transfer& transfer):
-  _transfer(transfer),
-  _bias(0.0), 
-  _weights(inputSize, 0.0)
+  Node(inputSize),
+  _transfer(transfer)
 {
 }
 
-void Neuron::init(const initializer_t& weightInit, const initializer_t& biasInit)
+value_t Neuron::output(const array_t& input) const
 {
-  std::generate(_weights.begin(), _weights.end(), std::cref(weightInit));
-  _bias = biasInit();
-}
-
-double Neuron::net(const array_t& input) const
-{
-  assert(input.size() == _weights.size());
-  const double val = std::inner_product(input.begin(), input.end(), _weights.begin(), _bias);
-  //std::cout << "Neuron net for: " << input << " : " << val << std::endl;
-  return val;
-}
-
-double Neuron::output(const array_t& input) const
-{
-  return _transfer.operation(net(input));
-}
-
-void Neuron::adjust(const array_t& deltaWeight, double deltaBias)
-{
-  assert(deltaWeight.size() == _weights.size());
-  std::transform(deltaWeight.begin(), deltaWeight.end(), _weights.begin(), _weights.begin(), std::plus<double>());
-  _bias += deltaBias;
+  return _transfer.operation(Node::output(input));
 }
 
 void Neuron::toStream(std::ostream& stream) const

@@ -12,7 +12,7 @@ namespace ccml {
 using namespace std::placeholders;
 
 GradientData::GradientData(const Neuron& neuron):
-  weights(neuron.weights().size(), 0.0),
+  weights(neuron.size(), 0.0),
   bias(0.0)
 {
 }

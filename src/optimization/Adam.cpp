@@ -8,7 +8,7 @@
 namespace ccml {
 
 AdamNeuronData::AdamNeuronData(const Neuron& neuron):
-  mW(neuron.weights().size(), 0.0), mB(0.0), vW(neuron.weights().size(), 0.0), vB(0.0)
+  mW(neuron.size(), 0.0), mB(0.0), vW(neuron.size(), 0.0), vB(0.0)
 {
 }
 

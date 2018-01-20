@@ -8,7 +8,7 @@ namespace ccml {
 using namespace std::placeholders;
 
 MomentumNeuronData::MomentumNeuronData(const Neuron& neuron):
-  deltaWeight(neuron.weights().size(), 0.0),
+  deltaWeight(neuron.size(), 0.0),
   deltaBias(0.0)
 {
 }

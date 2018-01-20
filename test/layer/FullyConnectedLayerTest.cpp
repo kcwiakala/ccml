@@ -26,7 +26,7 @@ TEST_F(FullyConnectedLayerTest, input_size)
   EXPECT_EQ(_layer->inputSize(), 18);
 
   _layer->forEachNeuron([](const Neuron& n, auto){
-    EXPECT_EQ(n.weights().size(), 18);
+    EXPECT_EQ(n.size(), 18);
   });
 }
 
