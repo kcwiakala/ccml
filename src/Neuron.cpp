@@ -8,8 +8,8 @@
 
 namespace ccml {
 
-Neuron::Neuron(size_t inputSize, const Activation& activation):
-  _activation(activation),
+Neuron::Neuron(size_t inputSize, const Transfer& transfer):
+  _transfer(transfer),
   _bias(0.0), 
   _weights(inputSize, 0.0)
 {
@@ -31,7 +31,7 @@ double Neuron::net(const array_t& input) const
 
 double Neuron::output(const array_t& input) const
 {
-  return _activation(net(input));
+  return _transfer.operation(net(input));
 }
 
 void Neuron::adjust(const array_t& deltaWeight, double deltaBias)
@@ -48,7 +48,7 @@ void Neuron::toStream(std::ostream& stream) const
   {
     stream << ((i>0) ? "," : "") << _weights[i];
   }
-  stream << "],b:" << _bias << ",a:" << _activation.name() << "}";
+  stream << "],b:" << _bias << ",a:" << _transfer.name << "}";
 }
 
 } // namespace ccml

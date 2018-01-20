@@ -4,7 +4,7 @@
 #include <memory>
 #include <ostream>
 
-#include <Activation.hpp>
+#include <Transfer.hpp>
 #include <Initialization.hpp>
 #include <Serializable.hpp>
 #include <Types.hpp>
@@ -14,7 +14,7 @@ namespace ccml {
 class Neuron: public Serializable
 {
 public:
-  Neuron(size_t inputSize, const Activation& activation);
+  Neuron(size_t inputSize, const Transfer& transfer);
 
 public:
   size_t size() const;
@@ -29,7 +29,7 @@ public:
 
   const value_t& bias() const;
 
-  const Activation& activation() const;
+  //const valu& activation() const;
 
   virtual void toStream(std::ostream& stream) const;
 
@@ -37,7 +37,7 @@ private:
   double net(const array_t& input) const;
 
 private:
-  const Activation& _activation;
+  const Transfer& _transfer;
   value_t _bias;
   array_t _weights;
 };
@@ -57,10 +57,10 @@ inline const value_t& Neuron::bias() const
   return _bias;
 }
 
-inline const Activation& Neuron::activation() const
-{
-  return _activation;
-}
+// inline const Activation& Neuron::activation() const
+// {
+//   return _activation;
+// }
 
 } // namespace ccml
 

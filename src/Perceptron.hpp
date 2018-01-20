@@ -26,7 +26,7 @@ public:
   bool learn(const sample_list_t& samples, double minLoss = 0.001, size_t maxIterations = 10000);
 
 private:
-  void adjust(const input_t& input, double error, input_t& aux);
+  void adjust(const array_t& input, double error, array_t& aux);
 
 private:
   Neuron _neuron;

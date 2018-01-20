@@ -8,7 +8,7 @@ namespace ccml {
 class FullyConnectedLayer: public NeuronLayer
 {
 public:
-  FullyConnectedLayer(size_t inputSize, size_t outputSize, const Activation& activation);
+  FullyConnectedLayer(size_t inputSize, size_t outputSize, const Transfer& transfer);
 
   virtual size_t inputSize() const;
 

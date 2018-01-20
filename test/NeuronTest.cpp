@@ -2,7 +2,6 @@
 
 #include <gtest/gtest.h>
 
-#include <activation/Sigmoid.hpp>
 #include <Neuron.hpp>
 
 namespace ccml {
@@ -13,7 +12,7 @@ class NeuronTest: public ::testing::Test
 
 TEST_F(NeuronTest, construction_test)
 {
-  ccml::Neuron n(2, ccml::Activation::sigmoid());
+  ccml::Neuron n(2, ccml::transfer::sigmoid());
 
   std::cout << n << std::endl;
 

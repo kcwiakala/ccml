@@ -8,7 +8,7 @@ namespace ccml {
 class MultiLayerPerceptron: public Network
 {
 public:
-  MultiLayerPerceptron(size_t inputSize, const Activation& activation);
+  MultiLayerPerceptron(size_t inputSize, const Transfer& transfer);
 
   MultiLayerPerceptron& push(size_t layerSize);
 
@@ -17,7 +17,7 @@ private:
 
 private:
   const size_t _inputSize;
-  const Activation& _activation;
+  const Transfer& _transfer;
 };
 
 } // namespace ccml

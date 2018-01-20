@@ -11,7 +11,7 @@ class FullyConnectedLayerTest: public testing::Test
 {
 protected:
   FullyConnectedLayerTest():
-    _layer(new FullyConnectedLayer(3,2,Activation::sigmoid()))
+    _layer(new FullyConnectedLayer(3,2,transfer::sigmoid()))
   {
   }
 
@@ -21,7 +21,7 @@ protected:
 
 TEST_F(FullyConnectedLayerTest, input_size)
 {
-  _layer.reset(new FullyConnectedLayer(18,4,Activation::sigmoid()));
+  _layer.reset(new FullyConnectedLayer(18,4,transfer::sigmoid()));
 
   EXPECT_EQ(_layer->inputSize(), 18);
 
@@ -32,7 +32,7 @@ TEST_F(FullyConnectedLayerTest, input_size)
 
 TEST_F(FullyConnectedLayerTest, activation)
 {
-  _layer.reset(new FullyConnectedLayer(3, 2, Activation::relu()));
+  _layer.reset(new FullyConnectedLayer(3, 2, transfer::relu()));
   _layer->init(initializer::constant(0.0), initializer::constant(0.0));
 
   _layer->forEachNeuron([](Neuron& n, size_t idx){

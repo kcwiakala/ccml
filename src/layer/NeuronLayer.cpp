@@ -9,10 +9,10 @@ namespace ccml {
 
 using namespace std::placeholders;
 
-NeuronLayer::NeuronLayer(const std::string& type, size_t layerSize, size_t neuronSize, const Activation& activation):
+NeuronLayer::NeuronLayer(const std::string& type, size_t layerSize, size_t neuronSize, const Transfer& transfer):
   TypedLayer(type),
-  _neurons(layerSize, Neuron(neuronSize, activation)),
-  _activation(activation)
+  _transfer(transfer),
+  _neurons(layerSize, Neuron(neuronSize, _transfer))
 {
 }
 
@@ -25,7 +25,7 @@ void NeuronLayer::error(const array_t& y, const array_t& dy, array_t& e) const
 {
   e.resize(dy.size());
   std::transform(y.begin(), y.end(), dy.begin(), e.begin(), [&](value_t yi, value_t dyi) {
-    return dyi * _activation.derivative(yi);
+    return dyi * _transfer.derivativeFromY(yi);
   });
 }
 

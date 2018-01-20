@@ -19,9 +19,9 @@ protected:
 TEST_F(StochasticGradientDescentTest, simple)
 { 
   Network net;
-  neuron_layer_ptr_t l1 = std::make_shared<FullyConnectedLayer>(2, 2, Activation::relu());
-  neuron_layer_ptr_t l2 = std::make_shared<FullyConnectedLayer>(2, 1, Activation::sigmoid());
-  neuron_layer_ptr_t l3 = std::make_shared<FullyConnectedLayer>(64, 1, Activation::sigmoid());
+  neuron_layer_ptr_t l1 = std::make_shared<FullyConnectedLayer>(2, 3, transfer::leakingRelu(0.01));
+  neuron_layer_ptr_t l2 = std::make_shared<FullyConnectedLayer>(3, 1, transfer::sigmoid());
+  // neuron_layer_ptr_t l3 = std::make_shared<FullyConnectedLayer>(64, 1, Activation::sigmoid());
   net.push(l1);
   net.push(l2);
   // net.push(l3);
@@ -35,7 +35,7 @@ TEST_F(StochasticGradientDescentTest, simple)
   std::cout << l2 << std::endl;
 
   // l3->init(Initializer::uniform(-0.2, -0.5), Initializer::uniform(-0.2, -0.5));
-  loss_ptr_t loss = Loss::meanSquaredError();
+  loss_ptr_t loss = Loss::crossEntropy();
   // _optimizer = std::make_unique<StochasticGradientDescent>(net, loss, 0.01);
   // _optimizer = std::make_unique<Momentum>(net, loss, 0.2, 0.1);
   _optimizer = std::make_unique<Adam>(net, loss, 0.01);

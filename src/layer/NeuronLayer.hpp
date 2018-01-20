@@ -43,13 +43,12 @@ public:
   Neuron& neuron(size_t idx);
 
 protected:
-  NeuronLayer(const std::string& type, size_t layerSize, size_t neuronSize, const Activation& activation);
+  NeuronLayer(const std::string& type, size_t layerSize, size_t neuronSize, const Transfer& transfer);
 
 protected:
+  const Transfer _transfer;
   typedef std::vector<Neuron> neuron_list_t;
   neuron_list_t _neurons;
-
-  const Activation& _activation;
 };
 
 typedef std::shared_ptr<NeuronLayer> neuron_layer_ptr_t;

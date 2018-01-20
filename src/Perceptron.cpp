@@ -8,7 +8,7 @@
 namespace ccml {
   
 Perceptron::Perceptron(size_t inputSize):
-  _neuron(inputSize, ccml::Activation::heaviside())
+  _neuron(inputSize, ccml::transfer::heaviside())
 {
 }
 
@@ -45,7 +45,7 @@ double Perceptron::loss(const sample_list_t& samples) const
   });
 }
 
-void Perceptron::adjust(const input_t& input, double error, input_t& aux) 
+void Perceptron::adjust(const array_t& input, double error, array_t& aux) 
 {
   std::transform(input.begin(), input.end(), aux.begin(), [=](double x) {
     return x * error;
@@ -56,7 +56,7 @@ void Perceptron::adjust(const input_t& input, double error, input_t& aux)
 bool Perceptron::learn(const sample_list_t& samples, double minLoss, size_t maxIterations)
 {
   size_t iter(0);
-  input_t aux(_neuron.size()); 
+  array_t aux(_neuron.size()); 
 
   while((loss(samples) > minLoss) && (++iter < maxIterations)) 
   {

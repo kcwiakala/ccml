@@ -4,8 +4,8 @@
 
 namespace ccml {
 
-MultiLayerPerceptron::MultiLayerPerceptron(size_t inputSize, const Activation& activation):
-  _inputSize(inputSize), _activation(activation)
+MultiLayerPerceptron::MultiLayerPerceptron(size_t inputSize, const Transfer& transfer):
+  _inputSize(inputSize), _transfer(transfer)
 {
 
 }
@@ -13,7 +13,7 @@ MultiLayerPerceptron::MultiLayerPerceptron(size_t inputSize, const Activation& a
 MultiLayerPerceptron& MultiLayerPerceptron::push(size_t layerSize)
 {
   const size_t inputSize((size() > 0) ? outputSize() : _inputSize);
-  Network::push(std::make_shared<FullyConnectedLayer>(inputSize, layerSize, _activation));
+  Network::push(std::make_shared<FullyConnectedLayer>(inputSize, layerSize, _transfer));
   return *this;
 }
 
