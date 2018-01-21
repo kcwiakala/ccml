@@ -114,7 +114,6 @@ Transfer create(const std::string& name)
   }
   else
   {
-    std::cout << name.substr(0,parenthesisPos) << std::endl;
     auto transferIt = paramTransfer.find(name.substr(0,parenthesisPos));
     if(transferIt == paramTransfer.end())
     {
@@ -125,7 +124,6 @@ Transfer create(const std::string& name)
     {
       throw std::logic_error("Invalid transfer name: " + name);
     }
-    std::cout << name.substr(parenthesisPos+1, parenthesisEnd - parenthesisPos - 1) << std::endl;
     return transferIt->second(name.substr(parenthesisPos+1, parenthesisEnd - parenthesisPos - 1));
   }
 }

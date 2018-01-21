@@ -2,6 +2,7 @@
 #define CCML_TRANSFER_HPP
 
 #include <memory>
+#include <ostream>
 
 #include <Serializable.hpp>
 #include <Types.hpp>
@@ -44,5 +45,11 @@ bool registerTransfer(const std::string& name, const param_transfer_creator_t& c
 
 } // namespace transfer
 } // namespace ccml
+
+inline std::ostream& operator<<(std::ostream& stream, const ccml::Transfer& transfer)
+{
+  stream << transfer.name;
+  return stream;
+}
 
 #endif // CCML_TRANSFER_HPP
