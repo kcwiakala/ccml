@@ -33,6 +33,15 @@ const Transfer& relu();
 
 Transfer leakingRelu(value_t leakingRate = 0.01);
 
+
+using param_transfer_creator_t = std::function<Transfer(const std::string&)>;
+
+Transfer create(const std::string& name);
+
+bool registerTransfer(const Transfer& transfer);
+
+bool registerTransfer(const std::string& name, const param_transfer_creator_t& creator);
+
 } // namespace transfer
 } // namespace ccml
 

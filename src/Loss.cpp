@@ -2,7 +2,6 @@
 #include <numeric>
 
 #include <Network.hpp>
-#include <Loss.hpp>
 
 #include <loss/CrossEntropy.hpp>
 #include <loss/MeanSquaredError.hpp>

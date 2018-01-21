@@ -34,7 +34,6 @@ void Backpropagation::feed(const Sample& sample, array_2d_t& activation, array_t
   std::transform(output.begin(), output.end(), sample.output.begin(), error.begin(), [&](value_t predicted, value_t expected) {
     return _loss->error(predicted, expected);
   });
-    
 }
 
 void Backpropagation::backpropagate(const array_2d_t& activation, array_2d_t& error) const

@@ -9,3 +9,5 @@ test.out
 *.a
 *.so
 utest
+
+core
