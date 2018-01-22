@@ -25,7 +25,9 @@ public:
 public:
   static loss_ptr_t meanSquaredError();
 
-  static loss_ptr_t crossEntropy();
+  static loss_ptr_t crossEntropySigmoid();
+
+  static loss_ptr_t crossEntropySoftmax();
 };
 
 } // namespace ccml

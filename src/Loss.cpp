@@ -3,7 +3,8 @@
 
 #include <Network.hpp>
 
-#include <loss/CrossEntropy.hpp>
+#include <loss/CrossEntropySigmoid.hpp>
+#include <loss/CrossEntropySoftmax.hpp>
 #include <loss/MeanSquaredError.hpp>
 
 namespace ccml {
@@ -21,9 +22,15 @@ loss_ptr_t Loss::meanSquaredError()
   return loss;
 }
 
-loss_ptr_t Loss::crossEntropy()
+loss_ptr_t Loss::crossEntropySigmoid()
 {
-  static loss_ptr_t loss(std::make_shared<loss::CrossEntropy>());
+  static loss_ptr_t loss(std::make_shared<loss::CrossEntropySigmoid>());
+  return loss;
+}
+
+loss_ptr_t Loss::crossEntropySoftmax()
+{
+  static loss_ptr_t loss(std::make_shared<loss::CrossEntropySoftmax>());
   return loss;
 }
 

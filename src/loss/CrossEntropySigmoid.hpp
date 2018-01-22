@@ -1,12 +1,12 @@
-#ifndef CCML_LOSS_CROSS_ENTROPY_HPP
-#define CCML_LOSS_CROSS_ENTROPY_HPP
+#ifndef CCML_LOSS_CROSS_ENTROPY_SIGMOID_HPP
+#define CCML_LOSS_CROSS_ENTROPY_SIGMOID_HPP
 
 #include <Loss.hpp>
 
 namespace ccml {
 namespace loss {
 
-class CrossEntropy: public Loss
+class CrossEntropySigmoid: public Loss
 {
 public:
   virtual value_t compute(const Network& network, const Sample& sample) const;
@@ -17,4 +17,4 @@ public:
 } // namespace loss
 } // namespace ccml
 
-#endif // CCML_LOSS_CROSS_ENTROPY_HPP
+#endif // CCML_LOSS_CROSS_ENTROPY_SIGMOID_HPP
