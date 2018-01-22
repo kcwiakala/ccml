@@ -21,10 +21,8 @@ size_t SoftmaxLayer::outputSize() const
 
 void SoftmaxLayer::error(const array_t& y, const array_t& dy, array_t& e) const
 {
-  // e.resize(dy.size());
-  // std::transform(y.begin(), y.end(), dy.begin(), e.begin(), [&](value_t yi, value_t dyi) {
-  //   return dyi * _transfer.derivativeFromY(yi);
-  // });
+  // Propagate error back, assume that dy already took softmax transfer into account
+  e = dy;
 }
 
 void SoftmaxLayer::output(const array_t& x, array_t& y) const
@@ -43,7 +41,7 @@ void SoftmaxLayer::output(const array_t& x, array_t& y) const
 
 void SoftmaxLayer::backpropagate(const array_t& error, array_t& inputError) const
 {
-  //inputError = error;
+  inputError = error;
 }
 
 void SoftmaxLayer::toStream(std::ostream& stream) const
