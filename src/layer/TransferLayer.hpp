@@ -23,6 +23,8 @@ public:
 
   virtual void toStream(std::ostream& stream) const;
 
+  const Transfer& transfer() const;
+
 private:
   const size_t _size;
   const Transfer _transfer;

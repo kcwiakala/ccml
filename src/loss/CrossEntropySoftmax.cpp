@@ -4,6 +4,7 @@
 #include <numeric>
 
 #include <Network.hpp>
+#include <layer/SoftmaxLayer.hpp>
 #include <loss/CrossEntropySoftmax.hpp>
 
 namespace ccml {
@@ -23,7 +24,19 @@ value_t CrossEntropySoftmax::compute(const Network& network, const Sample& sampl
 
 value_t CrossEntropySoftmax::error(value_t predicted, value_t expected) const
 {
-  return - expected / std::max(predicted, 1e-9);
+  return predicted - expected;
+}
+
+void CrossEntropySoftmax::validate(const Network& network) const
+{
+  Loss::validate(network);
+
+  // Check that last layer is a softmax layer
+  layer_ptr_t layer = network.layer(network.size() - 1);
+  if(dynamic_cast<const SoftmaxLayer*>(layer.get()) == nullptr)
+  {
+    throw std::logic_error("CrossEntropySoftmax is compatible only with networks having SoftmaxLayer output");
+  }
 }
 
 } // namespace loss

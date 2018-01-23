@@ -22,6 +22,8 @@ public:
 
   virtual value_t error(value_t predicted, value_t expected) const = 0;
 
+  virtual void validate(const Network& network) const;
+
 public:
   static loss_ptr_t meanSquaredError();
 

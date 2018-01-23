@@ -21,7 +21,7 @@ size_t FullyConnectedLayer::inputSize() const
 void FullyConnectedLayer::output(const array_t& x, array_t& y) const
 {
   y.resize(_nodes.size());
-  std::transform(_nodes.begin(), _nodes.end(), y.begin(), [&](const Node& node) {
+  std::transform(_nodes.cbegin(), _nodes.cend(), y.begin(), [&](const Node& node) {
     return _transfer.operation(node.output(x));
   });
 }

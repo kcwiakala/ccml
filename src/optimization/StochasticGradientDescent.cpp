@@ -56,8 +56,8 @@ void StochasticGradientDescent::updateGradients(const array_t& input, const arra
       const array_t& layerInput = (layerIdx == 0) ? input : activation[layerIdx - 1];
       layer->splitError(layerInput, error[layerIdx], [&](const array_t& inputError, size_t nodeIdx) {
         GradientData& data = _gradients[layerIdx][nodeIdx];
-        std::transform(data.weights.begin(), data.weights.end(), 
-            inputError.begin(), data.weights.begin(), 
+        std::transform(data.weights.cbegin(), data.weights.cend(), 
+            inputError.cbegin(), data.weights.begin(), 
             std::minus<value_t>());
         data.bias -= error[layerIdx][nodeIdx];
       });
@@ -75,7 +75,7 @@ void StochasticGradientDescent::normalizeGradients(size_t batchSize)
       for(size_t nodeIdx=0; nodeIdx < layer->size(); ++nodeIdx)
       {
         GradientData& gradients = _gradients[layerIdx][nodeIdx];
-        std::transform(gradients.weights.begin(), gradients.weights.end(), gradients.weights.begin(), [=](value_t g) {
+        std::transform(gradients.weights.cbegin(), gradients.weights.cend(), gradients.weights.begin(), [=](value_t g) {
           return g / batchSize;
         });
         gradients.bias /= batchSize;
@@ -104,7 +104,7 @@ void StochasticGradientDescent::adjustNodes()
 void StochasticGradientDescent::adjustNode(Node& node, GradientData& gradients, size_t layerIdx, size_t nodeIdx)
 {
   array_t& wg = gradients.weights;
-  std::transform(wg.begin(), wg.end(), wg.begin(), [this](value_t wgi) {
+  std::transform(wg.cbegin(), wg.cend(), wg.begin(), [this](value_t wgi) {
     return wgi * _rate;
   });
   node.adjust(wg, gradients.bias * _rate);

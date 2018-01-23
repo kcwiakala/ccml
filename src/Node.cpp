@@ -19,12 +19,12 @@ void Node::init(const initializer_t& weightInit, const initializer_t& biasInit)
 
 value_t Node::output(const array_t& input) const
 {
-  return std::inner_product(input.begin(), input.end(), _weights.begin(), _bias);
+  return std::inner_product(input.cbegin(), input.cend(), _weights.cbegin(), _bias);
 }
 
 void Node::adjust(const array_t& deltaWeight, double deltaBias)
 {
-  std::transform(deltaWeight.begin(), deltaWeight.end(), _weights.begin(), _weights.begin(), std::plus<double>());
+  std::transform(deltaWeight.cbegin(), deltaWeight.cend(), _weights.cbegin(), _weights.begin(), std::plus<double>());
   _bias += deltaBias;
 }
 

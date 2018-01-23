@@ -31,7 +31,7 @@ void Backpropagation::feed(const Sample& sample, array_2d_t& activation, array_t
   error.resize(output.size());
 
   // Calclate error on output layer
-  std::transform(output.begin(), output.end(), sample.output.begin(), error.begin(), [&](value_t predicted, value_t expected) {
+  std::transform(output.cbegin(), output.cend(), sample.output.cbegin(), error.begin(), [&](value_t predicted, value_t expected) {
     return _loss->error(predicted, expected);
   });
 }

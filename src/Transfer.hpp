@@ -11,10 +11,14 @@ namespace ccml {
 
 struct Transfer
 {
-public:
   Transfer(const std::string& nm, const value_converter_t& op, const value_converter_t& dfx, const value_converter_t& dfy):
     name(nm), operation(op), derivativeFromX(dfx), derivativeFromY(dfy)
   {}
+
+  bool operator==(const Transfer& other) const
+  {
+    return name == other.name;
+  }
 
   const std::string name;
   const value_converter_t operation;

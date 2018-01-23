@@ -12,6 +12,8 @@ public:
   virtual value_t compute(const Network& network, const Sample& sample) const;
 
   virtual value_t error(value_t predicted, value_t expected) const;
+
+  virtual void validate(const Network& network) const override;
 };
 
 } // namespace loss

@@ -29,12 +29,12 @@ void SoftmaxLayer::output(const array_t& x, array_t& y) const
 {
   y.resize(_size, 0.0);
   value_t sum = 0.0;
-  std::transform(x.begin(), x.end(), y.begin(), [&](value_t xi) {
+  std::transform(x.cbegin(), x.cend(), y.begin(), [&](value_t xi) {
     const value_t exi = std::exp(xi);
     sum += exi;
     return exi;
   });
-  std::transform(y.begin(), y.end(), y.begin(), [=](value_t yi) {
+  std::transform(y.cbegin(), y.cend(), y.begin(), [=](value_t yi) {
     return yi/sum;
   }); 
 }

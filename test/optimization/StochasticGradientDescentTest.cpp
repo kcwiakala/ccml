@@ -4,6 +4,7 @@
 #include <gtest/gtest.h>
 
 #include <layer/FullyConnectedLayer.hpp>
+#include <layer/TransferLayer.hpp>
 #include <optimization/StochasticGradientDescent.hpp>
 #include <optimization/Momentum.hpp>
 #include <optimization/Adam.hpp>
@@ -21,7 +22,7 @@ TEST_F(StochasticGradientDescentTest, simple)
   Network net;
   neuron_layer_ptr_t l1 = std::make_shared<FullyConnectedLayer>(2, 3, transfer::leakingRelu(0.01));
   neuron_layer_ptr_t l2 = std::make_shared<FullyConnectedLayer>(3, 1, transfer::sigmoid());
-  // neuron_layer_ptr_t l3 = std::make_shared<FullyConnectedLayer>(64, 1, Activation::sigmoid());
+  layer_ptr_t l3 = std::make_shared<TransferLayer>(1, transfer::sigmoid());
   net.push(l1);
   net.push(l2);
   // net.push(l3);

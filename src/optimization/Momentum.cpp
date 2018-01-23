@@ -31,7 +31,7 @@ void Momentum::adjustNode(Node& node, GradientData& gradients, size_t layerIdx, 
   
   const array_t& wg = gradients.weights;
   array_t& dw = data.deltaWeight;
-  std::transform(wg.begin(), wg.end(), dw.begin(), dw.begin(), [&](value_t wgi, value_t dwi) {
+  std::transform(wg.cbegin(), wg.cend(), dw.cbegin(), dw.begin(), [&](value_t wgi, value_t dwi) {
     return wgi * _rate + dwi * _momentum;
   });
   data.deltaBias = gradients.bias * _rate + data.deltaBias * _momentum;

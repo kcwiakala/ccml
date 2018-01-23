@@ -18,7 +18,7 @@ public:
     push(std::make_shared<Layer>(args...));
   }
 
-  void push(const layer_ptr_t&& layer);
+  void push(const layer_ptr_t& layer);
 
   size_t inputSize() const;
 

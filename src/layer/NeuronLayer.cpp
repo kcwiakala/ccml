@@ -24,7 +24,7 @@ size_t NeuronLayer::outputSize() const
 void NeuronLayer::error(const array_t& y, const array_t& dy, array_t& e) const
 {
   e.resize(dy.size());
-  std::transform(y.begin(), y.end(), dy.begin(), e.begin(), [&](value_t yi, value_t dyi) {
+  std::transform(y.cbegin(), y.cend(), dy.cbegin(), e.begin(), [&](value_t yi, value_t dyi) {
     return dyi * _transfer.derivativeFromY(yi);
   });
 }
