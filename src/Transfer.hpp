@@ -9,6 +9,30 @@
 
 namespace ccml {
 
+class TransferFunction 
+{
+public:
+  const std::string& name() const noexcept;
+
+  virtual void apply(const array_t& x, array_t& y) const;
+
+  virtual void deriverate(const array_t& y, array_t& dx) const;
+
+protected:
+  TransferFunction(const std::string& name): _name(name) {}
+
+  virtual ~TransferFunction() {}
+
+  virtual value_t apply(value_t x) const;
+
+  virtual value_t deriverate(value_t y) const;
+
+protected:
+  const std::string _name;
+};
+
+using transfer_ptr_t = std::shared_ptr<TransferFunction>;
+
 struct Transfer
 {
   Transfer(const std::string& nm, const value_converter_t& op, const value_converter_t& dfx, const value_converter_t& dfy):

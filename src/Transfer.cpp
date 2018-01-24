@@ -9,6 +9,38 @@
 #include <Transfer.hpp>
 
 namespace ccml {
+
+const std::string& TransferFunction::name() const noexcept
+{
+  return _name;
+}
+
+void TransferFunction::apply(const array_t& x, array_t& y) const
+{
+  y.resize(x.size());
+  std::transform(x.begin(), x.end(), y.begin(), [this](value_t xi) {
+    return apply(xi);
+  });
+}
+
+void TransferFunction::deriverate(const array_t& y, array_t& dx) const
+{
+  dx.resize(y.size());
+  std::transform(y.begin(), y.end(), dx.begin(), [this](value_t yi) {
+    return apply(yi);
+  });
+}
+
+value_t TransferFunction::apply(value_t x) const
+{
+  return x;
+}
+
+value_t TransferFunction::deriverate(value_t y) const
+{
+  return 1;
+}
+
 namespace transfer {
 
 const Transfer& heaviside()

@@ -9,6 +9,8 @@
 #include <optimization/Momentum.hpp>
 #include <optimization/Adam.hpp>
 
+#include <transfer/Softmax.hpp>
+
 namespace ccml {
 
 class StochasticGradientDescentTest: public testing::Test
@@ -32,8 +34,8 @@ TEST_F(StochasticGradientDescentTest, simple)
 
   // l3->init(initializer, initializer);
 
-  std::cout << l1 << std::endl;
-  std::cout << l2 << std::endl;
+  // std::cout << l1 << std::endl;
+  // std::cout << l2 << std::endl;
 
   // l3->init(Initializer::uniform(-0.2, -0.5), Initializer::uniform(-0.2, -0.5));
   loss_ptr_t loss = Loss::crossEntropySigmoid();
@@ -55,7 +57,7 @@ TEST_F(StochasticGradientDescentTest, simple)
 
   // std::shuffle(xorSamples.begin(), xorSamples.end(), g);
   
-  std::cout << "Loss before training: " << loss->compute(net, xorSamples) << std::endl;
+  // std::cout << "Loss before training: " << loss->compute(net, xorSamples) << std::endl;
   bool success = false;
   // for(size_t i=0; i<100 && !success; ++i) 
   // {
@@ -68,9 +70,9 @@ TEST_F(StochasticGradientDescentTest, simple)
   success = _optimizer->train(xorSamples, 4, 100000, 0.001);
   EXPECT_TRUE(success);
 
-  std::cout << l1 << std::endl;
-  std::cout << l2 << std::endl;
-  std::cout << "Loss after training: " << loss->compute(net, xorSamples) << std::endl;
+  // std::cout << l1 << std::endl;
+  // std::cout << l2 << std::endl;
+  // std::cout << "Loss after training: " << loss->compute(net, xorSamples) << std::endl;
 
   EXPECT_GT(net.output(xorSamples[0].input)[0], 0.5);
   EXPECT_GT(net.output({0, 1})[0], 0.5);
