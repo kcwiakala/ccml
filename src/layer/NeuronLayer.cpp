@@ -9,7 +9,7 @@ namespace ccml {
 
 using namespace std::placeholders;
 
-NeuronLayer::NeuronLayer(const std::string& type, size_t layerSize, size_t neuronSize, const Transfer& transfer):
+NeuronLayer::NeuronLayer(const std::string& type, size_t layerSize, size_t neuronSize, const transfer_ptr_t& transfer):
   TypedLayer(type),
   _transfer(transfer),
   _nodes(layerSize, Node(neuronSize))
@@ -23,10 +23,12 @@ size_t NeuronLayer::outputSize() const
 
 void NeuronLayer::error(const array_t& y, const array_t& dy, array_t& e) const
 {
-  e.resize(dy.size());
-  std::transform(y.cbegin(), y.cend(), dy.cbegin(), e.begin(), [&](value_t yi, value_t dyi) {
-    return dyi * _transfer.derivativeFromY(yi);
+  //e.resize(dy.size());
+  _transfer->deriverate(y, e);
+  std::transform(e.cbegin(), e.cend(), dy.cbegin(), e.begin(), [](value_t ei, value_t dyi) {
+    return dyi * ei;
   });
+  //std::cout << e << std::endl;
 }
 
 void NeuronLayer::init(const initializer_t& weightInit, const initializer_t& biasInit)
@@ -57,7 +59,7 @@ void NeuronLayer::toStream(std::ostream& stream) const
   {
     stream << ((i>0) ? "," : "") << _nodes[i];
   }
-  stream << "],t:" << _transfer.name << "}";
+  stream << "],t:" << _transfer->name() << "}";
 }
 
 } // namespace ccml

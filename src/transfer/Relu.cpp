@@ -15,7 +15,7 @@ value_t Relu::apply(value_t x) const
 
 value_t Relu::deriverate(value_t y) const
 {
-  return (y > 0) ? 1 : 0;
+  return (y > 0.0) ? 1.0 : 0.0;
 }
 
 } // namespace transfer

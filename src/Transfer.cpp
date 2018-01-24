@@ -18,7 +18,7 @@ const std::string& TransferFunction::name() const noexcept
 void TransferFunction::apply(const array_t& x, array_t& y) const
 {
   y.resize(x.size());
-  std::transform(x.begin(), x.end(), y.begin(), [this](value_t xi) {
+  std::transform(x.begin(), x.end(), y.begin(), [&](value_t xi) {
     return apply(xi);
   });
 }
@@ -26,8 +26,8 @@ void TransferFunction::apply(const array_t& x, array_t& y) const
 void TransferFunction::deriverate(const array_t& y, array_t& dx) const
 {
   dx.resize(y.size());
-  std::transform(y.begin(), y.end(), dx.begin(), [this](value_t yi) {
-    return apply(yi);
+  std::transform(y.begin(), y.end(), dx.begin(), [&](value_t yi) {
+    return deriverate(yi);
   });
 }
 

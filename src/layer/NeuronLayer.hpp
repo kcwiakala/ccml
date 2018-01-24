@@ -35,10 +35,11 @@ public:
   Node& node(size_t idx);
 
 protected:
-  NeuronLayer(const std::string& type, size_t layerSize, size_t neuronSize, const Transfer& transfer);
+  NeuronLayer(const std::string& type, size_t layerSize, size_t neuronSize, const transfer_ptr_t& transfer);
 
 protected:
-  const Transfer _transfer;
+  // const Transfer _transfer;
+  transfer_ptr_t _transfer;
   using node_list_t = std::vector<Node>;
   node_list_t _nodes;
 };

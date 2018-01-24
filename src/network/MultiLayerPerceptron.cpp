@@ -4,7 +4,7 @@
 
 namespace ccml {
 
-MultiLayerPerceptron::MultiLayerPerceptron(size_t inputSize, const Transfer& transfer):
+MultiLayerPerceptron::MultiLayerPerceptron(size_t inputSize, const transfer_ptr_t& transfer):
   _inputSize(inputSize), _transfer(transfer)
 {
 

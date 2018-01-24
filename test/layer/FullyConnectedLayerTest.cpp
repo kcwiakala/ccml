@@ -5,13 +5,16 @@
 
 #include <layer/FullyConnectedLayer.hpp>
 
+#include <transfer/Sigmoid.hpp>
+#include <transfer/Relu.hpp>
+
 namespace ccml {
 
 class FullyConnectedLayerTest: public testing::Test
 {
 protected:
   FullyConnectedLayerTest():
-    _layer(new FullyConnectedLayer(3,2,transfer::sigmoid()))
+    _layer(new FullyConnectedLayer(3,2,std::make_shared<transfer::Sigmoid>()))
   {
   }
 
@@ -21,7 +24,7 @@ protected:
 
 TEST_F(FullyConnectedLayerTest, input_size)
 {
-  _layer.reset(new FullyConnectedLayer(18,4,transfer::sigmoid()));
+  _layer.reset(new FullyConnectedLayer(18,4,std::make_shared<transfer::Sigmoid>()));
 
   EXPECT_EQ(_layer->inputSize(), 18);
 
@@ -33,7 +36,7 @@ TEST_F(FullyConnectedLayerTest, input_size)
 
 TEST_F(FullyConnectedLayerTest, activation)
 {
-  _layer.reset(new FullyConnectedLayer(3, 2, transfer::relu()));
+  _layer.reset(new FullyConnectedLayer(3, 2, std::make_shared<transfer::Relu>()));
   _layer->init(initializer::constant(0.0), initializer::constant(0.0));
 
   ASSERT_EQ(_layer->size(), 2u);

@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <iostream>
 #include <functional>
 
 #include "Backpropagation.hpp"
@@ -47,6 +48,7 @@ void Backpropagation::backpropagate(const array_2d_t& activation, array_2d_t& er
 
     // Calculate error term for the neuron layer
     layer->error(activation[layerIdx], error[layerIdx], aux);
+    // std::cout << "ERROR: " << aux << std::endl;
     error[layerIdx].swap(aux);
 
     if(layerIdx > 0)

@@ -6,12 +6,15 @@
 
 #include <layer/NeuronLayer.hpp>
 
+#include <transfer/Heaviside.hpp>
+#include <transfer/Sigmoid.hpp>
+
 namespace ccml {
 
 class NeuronLayerMock: public NeuronLayer
 {
 public:
-  NeuronLayerMock(size_t layerSize, size_t neuronSize, const Transfer& transfer):
+  NeuronLayerMock(size_t layerSize, size_t neuronSize, const transfer_ptr_t& transfer):
     NeuronLayer("NeuronLayerMock", layerSize, neuronSize, transfer)
   {
   }
@@ -26,7 +29,7 @@ class NeuronLayerTest: public testing::Test
 {
 protected:
   NeuronLayerTest():
-    _layer(new NeuronLayerMock(3,2,transfer::sigmoid()))
+    _layer(new NeuronLayerMock(3,2,std::make_shared<transfer::Sigmoid>()))
   {
   }
 
@@ -36,7 +39,7 @@ protected:
 
 TEST_F(NeuronLayerTest, number_of_neurons)
 {
-  _layer.reset(new NeuronLayerMock(6, 2, transfer::heaviside()));
+  _layer.reset(new NeuronLayerMock(6, 2, std::make_shared<transfer::Heaviside>()));
 
   EXPECT_EQ(_layer->outputSize(), 6u);
   EXPECT_EQ(_layer->size(), 6u);
@@ -44,7 +47,7 @@ TEST_F(NeuronLayerTest, number_of_neurons)
 
 TEST_F(NeuronLayerTest, neuron_initialization)
 {
-  _layer.reset(new NeuronLayerMock(3,2,transfer::heaviside()));
+  _layer.reset(new NeuronLayerMock(3,2,std::make_shared<transfer::Heaviside>()));
 
   _layer->init(initializer::constant(87), initializer::constant(5));
 
