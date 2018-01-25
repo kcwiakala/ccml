@@ -3,7 +3,7 @@
 namespace ccml {
 namespace transfer {
 
-Identity::Identity(): TransferFunction("identity")
+Identity::Identity(): Transfer("identity")
 {
 }
 

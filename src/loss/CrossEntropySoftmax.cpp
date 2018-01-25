@@ -32,11 +32,11 @@ void CrossEntropySoftmax::validate(const Network& network) const
   Loss::validate(network);
 
   // Check that last layer is a softmax layer
-  layer_ptr_t layer = network.layer(network.size() - 1);
-  if(dynamic_cast<const SoftmaxLayer*>(layer.get()) == nullptr)
-  {
-    throw std::logic_error("CrossEntropySoftmax is compatible only with networks having SoftmaxLayer output");
-  }
+  // layer_ptr_t layer = network.layer(network.size() - 1);
+  // if(dynamic_cast<const SoftmaxLayer*>(layer.get()) == nullptr)
+  // {
+  //   throw std::logic_error("CrossEntropySoftmax is compatible only with networks having SoftmaxLayer output");
+  // }
 }
 
 } // namespace loss

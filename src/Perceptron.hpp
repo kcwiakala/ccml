@@ -1,7 +1,7 @@
 #ifndef CCML_PERCEPTRON_HPP
 #define CCML_PERCEPTRON_HPP
 
-#include <Neuron.hpp>
+#include <layer/FullyConnectedLayer.hpp>
 #include <Sample.hpp>
 
 namespace ccml {
@@ -15,13 +15,13 @@ public:
 
   void init(const initializer_t& initializer);
 
-  double output(const std::vector<double>& input) const;
+  value_t output(const array_t& input) const;
 
-  double error(const Sample& sample) const;
+  value_t error(const Sample& sample) const;
 
-  double loss(const Sample& sample) const;
+  value_t loss(const Sample& sample) const;
 
-  double loss(const sample_list_t& samples) const;
+  value_t loss(const sample_list_t& samples) const;
 
   bool learn(const sample_list_t& samples, double minLoss = 0.001, size_t maxIterations = 10000);
 
@@ -29,7 +29,7 @@ private:
   void adjust(const array_t& input, double error, array_t& aux);
 
 private:
-  Neuron _neuron;
+  FullyConnectedLayer _layer;
 };
 
 } // namespace ccml

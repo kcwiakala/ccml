@@ -3,7 +3,7 @@
 namespace ccml {
 namespace transfer {
 
-Heaviside::Heaviside(): TransferFunction("heaviside")
+Heaviside::Heaviside(): Transfer("heaviside")
 {
 }
 

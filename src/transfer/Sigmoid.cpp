@@ -4,7 +4,7 @@
 namespace ccml {
 namespace transfer {
 
-Sigmoid::Sigmoid(): TransferFunction("sigmoid")
+Sigmoid::Sigmoid(): Transfer("sigmoid")
 {
 }
 

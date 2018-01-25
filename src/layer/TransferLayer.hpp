@@ -2,14 +2,14 @@
 #define CCML_TRANSFER_LAYER_HPP
 
 #include <layer/AbstractLayer.hpp>
-#include <Transfer.hpp>
+#include <transfer/Transfer.hpp>
 
 namespace ccml {
 
 class TransferLayer: public AbstractLayer
 {
 public:
-  TransferLayer(size_t layerSize, const Transfer& transfer);
+  TransferLayer(size_t layerSize, const transfer_ptr_t& transfer);
 
   virtual size_t inputSize() const;
 
@@ -23,11 +23,11 @@ public:
 
   virtual void toStream(std::ostream& stream) const;
 
-  const Transfer& transfer() const;
+  const transfer_ptr_t& transfer() const;
 
 private:
   const size_t _size;
-  const Transfer _transfer;
+  const transfer_ptr_t _transfer;
 };
 
 } // namespace ccml

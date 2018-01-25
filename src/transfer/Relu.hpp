@@ -1,12 +1,12 @@
 #ifndef CCML_TRANSFER_RELU_HPP
 #define CCML_TRANSFER_RELU_HPP
 
-#include <Transfer.hpp>
+#include "Transfer.hpp"
 
 namespace ccml {
 namespace transfer {
 
-class Relu: public TransferFunction
+class Relu: public Transfer
 {
 public:
   Relu();

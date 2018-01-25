@@ -83,7 +83,7 @@ array_t Network::output(const array_t& x) const
 {
   array_t y;
   output(x,y);
-  return std::move(y);
+  return y;
 }
 
 } // namespace ccml

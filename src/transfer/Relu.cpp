@@ -4,7 +4,7 @@
 namespace ccml {
 namespace transfer {
 
-Relu::Relu(): TransferFunction("relu")
+Relu::Relu(): Transfer("relu")
 {
 }
 

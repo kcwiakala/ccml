@@ -4,17 +4,18 @@
 #include <numeric>
 
 #include <Perceptron.hpp>
+#include <transfer/Heaviside.hpp>
 
 namespace ccml {
   
 Perceptron::Perceptron(size_t inputSize):
-  _neuron(inputSize, ccml::transfer::heaviside())
+  _layer(inputSize, 1, std::make_shared<transfer::Heaviside>())
 {
 }
 
 void Perceptron::init(const initializer_t& weightInit, const initializer_t& biasInit)
 {
-  _neuron.init(weightInit, biasInit);
+  _layer.init(weightInit, biasInit);
 }
 
 void Perceptron::init(const initializer_t& initializer)
@@ -22,9 +23,11 @@ void Perceptron::init(const initializer_t& initializer)
   init(initializer, initializer);
 }
 
-double Perceptron::output(const std::vector<double>& input) const
+value_t Perceptron::output(const array_t& input) const
 {
-  return _neuron.output(input);
+  static array_t aux;
+  _layer.output(input, aux);
+  return aux[0];
 }
 
 double Perceptron::error(const Sample& sample) const
@@ -47,16 +50,16 @@ double Perceptron::loss(const sample_list_t& samples) const
 
 void Perceptron::adjust(const array_t& input, double error, array_t& aux) 
 {
-  std::transform(input.begin(), input.end(), aux.begin(), [=](double x) {
+  std::transform(input.begin(), input.end(), aux.begin(), [=](value_t x) {
     return x * error;
   });
-  _neuron.adjust(aux, error);
+  _layer.node(0).adjust(aux, error);
 }
 
 bool Perceptron::learn(const sample_list_t& samples, double minLoss, size_t maxIterations)
 {
   size_t iter(0);
-  array_t aux(_neuron.size()); 
+  array_t aux(_layer.inputSize()); 
 
   while((loss(samples) > minLoss) && (++iter < maxIterations)) 
   {

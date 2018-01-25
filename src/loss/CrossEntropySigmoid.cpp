@@ -35,12 +35,12 @@ void CrossEntropySigmoid::validate(const Network& network) const
   Loss::validate(network);
 
   // Check that last layer is a softmax layer
-  layer_ptr_t layer = network.layer(network.size() - 1);
-  auto transferLayer = dynamic_cast<const TransferLayer*>(layer.get());
-  if((transferLayer == nullptr) || !(transferLayer->transfer() == transfer::sigmoid()))
-  {
-    throw std::logic_error("CrossEntropySigmoid is compatible only with networks having SigmoidLayer output");
-  }
+  // layer_ptr_t layer = network.layer(network.size() - 1);
+  // auto transferLayer = dynamic_cast<const TransferLayer*>(layer.get());
+  // if((transferLayer == nullptr) || !(transferLayer->transfer() == transfer::sigmoid()))
+  // {
+  //   throw std::logic_error("CrossEntropySigmoid is compatible only with networks having SigmoidLayer output");
+  // }
 }
 
 } // namespace loss

@@ -1,12 +1,12 @@
 #ifndef CCML_TRANSFER_LEAKING_RELU_HPP
 #define CCML_TRANSFER_LEAKING_RELU_HPP
 
-#include <Transfer.hpp>
+#include "Transfer.hpp"
 
 namespace ccml {
 namespace transfer {
 
-class LeakingRelu: public TransferFunction
+class LeakingRelu: public Transfer
 {
 public:
   LeakingRelu(double leakingRate);

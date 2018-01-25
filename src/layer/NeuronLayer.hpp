@@ -3,8 +3,8 @@
 
 #include <functional>
 
-#include <Neuron.hpp>
-
+#include <Node.hpp>
+#include <transfer/Transfer.hpp>
 #include "TypedLayer.hpp"
 
 namespace ccml {

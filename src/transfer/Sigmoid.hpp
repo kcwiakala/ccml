@@ -1,12 +1,12 @@
 #ifndef CCML_TRANSFER_SIGMOID_HPP
 #define CCML_TRANSFER_SIGMOID_HPP
 
-#include <Transfer.hpp>
+#include "Transfer.hpp"
 
 namespace ccml {
 namespace transfer {
 
-class Sigmoid: public TransferFunction
+class Sigmoid: public Transfer
 {
 public:
   Sigmoid();

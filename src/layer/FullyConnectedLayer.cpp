@@ -22,17 +22,11 @@ size_t FullyConnectedLayer::inputSize() const
 
 void FullyConnectedLayer::output(const array_t& x, array_t& y) const
 {
-  static thread_local array_t aux;
-
-  aux.resize(_nodes.size());
-  std::transform(_nodes.cbegin(), _nodes.cend(), aux.begin(), [&](const Node& node) {
+  y.resize(_nodes.size());
+  std::transform(_nodes.cbegin(), _nodes.cend(), y.begin(), [&](const Node& node) {
     return node.output(x);
   });
-  // std::cout << *this << std::endl;
-  // std::cout << "IN:  " << x << std::endl;
-  // std::cout << "NET: " << aux << std::endl;
-  _transfer->apply(aux, y);
-  // std::cout << "OUT: " << y << std::endl;
+  _transfer->apply(y);
 }
 
 void FullyConnectedLayer::backpropagate(const array_t& error, array_t& inputError) const

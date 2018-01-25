@@ -5,7 +5,7 @@ namespace ccml {
 namespace transfer {
 
 LeakingRelu::LeakingRelu(double leakingRate): 
-  TransferFunction("leakingRelu(" + std::to_string(leakingRate) + ")"),
+  Transfer("leakingRelu(" + std::to_string(leakingRate) + ")"),
   _leakingRate(leakingRate)
 {
 }

@@ -12,10 +12,10 @@ class Network
 public:
   Network() {}
 
-  template<typename Layer, typename ...Args>
-  void push(Args ...args) 
+  template<typename Layer, typename... Args>
+  void push(Args&&... args) 
   {
-    push(std::make_shared<Layer>(args...));
+    push(std::make_shared<Layer>(std::forward<Args>(args)...));
   }
 
   void push(const layer_ptr_t& layer);

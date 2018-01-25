@@ -23,17 +23,17 @@ size_t NeuronLayer::outputSize() const
 
 void NeuronLayer::error(const array_t& y, const array_t& dy, array_t& e) const
 {
-  //e.resize(dy.size());
   _transfer->deriverate(y, e);
   std::transform(e.cbegin(), e.cend(), dy.cbegin(), e.begin(), [](value_t ei, value_t dyi) {
     return dyi * ei;
   });
-  //std::cout << e << std::endl;
 }
 
 void NeuronLayer::init(const initializer_t& weightInit, const initializer_t& biasInit)
 {
-  std::for_each(_nodes.begin(), _nodes.end(), std::bind(&Neuron::init, _1, std::cref(weightInit), std::cref(biasInit)));
+  std::for_each(_nodes.begin(), _nodes.end(), [&](Node& node) {
+    node.init(weightInit, biasInit);
+  });
 }
 
 size_t NeuronLayer::size() const

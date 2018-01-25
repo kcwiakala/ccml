@@ -1,12 +1,12 @@
 #ifndef CCML_TRANSFER_HEAVISIDE_HPP
 #define CCML_TRANSFER_HEAVISIDE_HPP
 
-#include <Transfer.hpp>
+#include "Transfer.hpp"
 
 namespace ccml {
 namespace transfer {
 
-class Heaviside: public TransferFunction
+class Heaviside: public Transfer
 {
 public:
   Heaviside();
