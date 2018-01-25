@@ -4,7 +4,6 @@
 #include <numeric>
 
 #include <Network.hpp>
-#include <layer/SoftmaxLayer.hpp>
 #include <loss/CrossEntropySoftmax.hpp>
 
 namespace ccml {

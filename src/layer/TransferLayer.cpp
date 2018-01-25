@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <iostream>
 
 #include "TransferLayer.hpp"
 
@@ -6,6 +7,11 @@ namespace ccml {
 
 TransferLayer::TransferLayer(size_t layerSize, const transfer_ptr_t& transfer):
   _size(layerSize), _transfer(transfer)
+{
+}
+
+TransferLayer::TransferLayer(size_t layerSize, transfer_ptr_t&& transfer):
+  _size(layerSize), _transfer(std::move(transfer))
 {
 }
 
@@ -42,9 +48,9 @@ void TransferLayer::toStream(std::ostream& stream) const
   stream << "TransferLayer:{s:" << _size << ",t:" << _transfer->name() << "}";
 }
 
-const transfer_ptr_t& TransferLayer::transfer() const
+const Transfer& TransferLayer::transfer() const
 {
-  return _transfer;
+  return *_transfer;
 }
 
 } // namespace ccml

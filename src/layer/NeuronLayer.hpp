@@ -5,19 +5,17 @@
 
 #include <Node.hpp>
 #include <transfer/Transfer.hpp>
-#include "TypedLayer.hpp"
+#include "TransferLayer.hpp"
 
 namespace ccml {
 
-class NeuronLayer: public TypedLayer
+class NeuronLayer: public TransferLayer
 {
 public:
   typedef std::function<void(const array_t&, size_t)> error_reader_t;
 
 public:
-  virtual ~NeuronLayer() {}
-
-  virtual size_t outputSize() const;
+  virtual ~NeuronLayer();
 
   virtual void error(const array_t& y, const array_t& dy, array_t& e) const;
 
@@ -35,13 +33,17 @@ public:
   Node& node(size_t idx);
 
 protected:
-  NeuronLayer(const std::string& type, size_t layerSize, size_t neuronSize, const transfer_ptr_t& transfer);
+  template<typename Tp, typename Tr>
+  NeuronLayer(Tp&& type, size_t layerSize, size_t neuronSize, Tr&& transfer):
+    TransferLayer(layerSize, std::forward<Tr>(transfer)),
+    _nodes(layerSize, Node(neuronSize)),
+    _type(std::forward<Tp>(type))
+  {}
 
 protected:
-  // const Transfer _transfer;
-  transfer_ptr_t _transfer;
   using node_list_t = std::vector<Node>;
   node_list_t _nodes;
+  const std::string _type;
 };
 
 typedef std::shared_ptr<NeuronLayer> neuron_layer_ptr_t;

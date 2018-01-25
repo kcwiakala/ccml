@@ -11,6 +11,8 @@ class TransferLayer: public AbstractLayer
 public:
   TransferLayer(size_t layerSize, const transfer_ptr_t& transfer);
 
+  TransferLayer(size_t layerSize, transfer_ptr_t&& transfer);
+
   virtual size_t inputSize() const;
 
   virtual size_t outputSize() const;
@@ -23,7 +25,7 @@ public:
 
   virtual void toStream(std::ostream& stream) const;
 
-  const transfer_ptr_t& transfer() const;
+  const Transfer& transfer() const;
 
 private:
   const size_t _size;

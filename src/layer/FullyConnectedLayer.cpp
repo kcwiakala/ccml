@@ -9,12 +9,6 @@ namespace ccml {
 
 using namespace std::placeholders;
 
-FullyConnectedLayer::FullyConnectedLayer(size_t inputSize, size_t outputSize, const transfer_ptr_t& transfer):
-  NeuronLayer("FullyConnectedLayer", outputSize, inputSize, transfer),
-  _inputSize(inputSize)
-{
-}
-
 size_t FullyConnectedLayer::inputSize() const
 {
   return _inputSize;
@@ -26,7 +20,7 @@ void FullyConnectedLayer::output(const array_t& x, array_t& y) const
   std::transform(_nodes.cbegin(), _nodes.cend(), y.begin(), [&](const Node& node) {
     return node.output(x);
   });
-  _transfer->apply(y);
+  transfer().apply(y);
 }
 
 void FullyConnectedLayer::backpropagate(const array_t& error, array_t& inputError) const

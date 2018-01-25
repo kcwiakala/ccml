@@ -8,7 +8,11 @@ namespace ccml {
 class FullyConnectedLayer: public NeuronLayer
 {
 public:
-  FullyConnectedLayer(size_t inputSize, size_t outputSize, const transfer_ptr_t& transfer);
+  template<typename Tr>
+  FullyConnectedLayer(size_t inputSize, size_t outputSize, Tr&& transfer):
+    NeuronLayer("FullyConnectedLayer", outputSize, inputSize, std::forward<Tr>(transfer)),
+    _inputSize(inputSize)
+  {}
 
   virtual size_t inputSize() const;
 
