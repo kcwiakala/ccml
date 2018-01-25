@@ -24,6 +24,7 @@ void Transfer::apply(array_t& x) const
 
 void Transfer::apply(const array_t& x, array_t& y) const
 {
+  y.resize(x.size());
   std::transform(x.cbegin(), x.cend(), y.begin(), [&](value_t xi) {
     return apply(xi);
   });
