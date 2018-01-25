@@ -1,12 +1,12 @@
 #ifndef CCML_LOSS_CROSS_ENTROPY_SOFTMAX_HPP
 #define CCML_LOSS_CROSS_ENTROPY_SOFTMAX_HPP
 
-#include <Loss.hpp>
+#include "AbstractLoss.hpp"
 
 namespace ccml {
 namespace loss {
 
-class CrossEntropySoftmax: public Loss
+class CrossEntropySoftmax: public AbstractLoss
 {
 public:
   virtual value_t compute(const Network& network, const Sample& sample) const;

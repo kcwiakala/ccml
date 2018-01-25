@@ -1,12 +1,12 @@
 #ifndef CCML_LOSS_CROSS_ENTROPY_SIGMOID_HPP
 #define CCML_LOSS_CROSS_ENTROPY_SIGMOID_HPP
 
-#include <Loss.hpp>
+#include "AbstractLoss.hpp"
 
 namespace ccml {
 namespace loss {
 
-class CrossEntropySigmoid: public Loss
+class CrossEntropySigmoid: public AbstractLoss
 {
 public:
   virtual value_t compute(const Network& network, const Sample& sample) const override;

@@ -32,7 +32,7 @@ value_t CrossEntropySigmoid::error(value_t predicted, value_t expected) const
 
 void CrossEntropySigmoid::validate(const Network& network) const
 {
-  Loss::validate(network);
+  AbstractLoss::validate(network);
 
   // Check that last layer is a softmax layer
   // layer_ptr_t layer = network.layer(network.size() - 1);

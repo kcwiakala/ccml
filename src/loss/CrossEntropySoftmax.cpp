@@ -29,7 +29,7 @@ value_t CrossEntropySoftmax::error(value_t predicted, value_t expected) const
 
 void CrossEntropySoftmax::validate(const Network& network) const
 {
-  Loss::validate(network);
+  AbstractLoss::validate(network);
 
   // Check that last layer is a softmax layer
   // layer_ptr_t layer = network.layer(network.size() - 1);

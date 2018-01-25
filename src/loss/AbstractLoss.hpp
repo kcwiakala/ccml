@@ -1,5 +1,5 @@
-#ifndef CCML_LOSS_HPP
-#define CCML_LOSS_HPP
+#ifndef CCML_ABSTRACT_LOSS_HPP
+#define CCML_ABSTRACT_LOSS_HPP
 
 #include <memory>
 
@@ -9,13 +9,12 @@
 namespace ccml {
 
 class Network;
-class Loss;
 
-typedef std::shared_ptr<Loss> loss_ptr_t;
-
-class Loss
+class AbstractLoss
 {
 public:
+  virtual ~AbstractLoss() {}
+
   value_t compute(const Network& network, const sample_list_t& samples) const;
 
   virtual value_t compute(const Network& network, const Sample& sample) const = 0;
@@ -23,15 +22,10 @@ public:
   virtual value_t error(value_t predicted, value_t expected) const = 0;
 
   virtual void validate(const Network& network) const;
-
-public:
-  static loss_ptr_t meanSquaredError();
-
-  static loss_ptr_t crossEntropySigmoid();
-
-  static loss_ptr_t crossEntropySoftmax();
 };
+
+using loss_ptr_t = std::shared_ptr<AbstractLoss>;
 
 } // namespace ccml
 
-#endif // CCML_LOSS_HPP
+#endif // CCML_ABSTRACT_LOSS_HPP
