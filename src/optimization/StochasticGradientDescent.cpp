@@ -23,8 +23,7 @@ void GradientData::reset()
   std::fill(weights.begin(), weights.end(), 0.0);
 }
 
-StochasticGradientDescent::StochasticGradientDescent(Network& network, const loss_ptr_t& loss, double rate):
-  Backpropagation(network, loss), _rate(rate)
+void StochasticGradientDescent::initGradients()
 {
   _gradients.resize(_network.size());
 
@@ -40,10 +39,6 @@ StochasticGradientDescent::StochasticGradientDescent(Network& network, const los
       }
     }
   }
-}
-
-StochasticGradientDescent::~StochasticGradientDescent() 
-{
 }
 
 void StochasticGradientDescent::updateGradients(const array_t& input, const array_2d_t& activation, const array_2d_t& error)

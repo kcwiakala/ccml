@@ -8,11 +8,6 @@ namespace ccml {
 
 using namespace std::placeholders;
 
-Backpropagation::Backpropagation(Network& network, const loss_ptr_t& loss):
-  NetworkOptimization(network, loss)
-{  
-}
-
 void Backpropagation::passSample(const Sample& sample, array_2d_t& activation, array_2d_t& error) const
 {
   error.resize(_network.size());

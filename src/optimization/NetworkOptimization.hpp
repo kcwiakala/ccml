@@ -20,7 +20,11 @@ protected:
   virtual void initEpoch();
 
 protected:
-  NetworkOptimization(Network& network, const loss_ptr_t& loss): _network(network), _loss(loss) {}
+  template<typename Tl>
+  NetworkOptimization(Network& network, Tl&& loss): 
+    _network(network), 
+    _loss(std::forward<Tl>(loss)) 
+  {}
 
   virtual ~NetworkOptimization() {}
 
@@ -29,7 +33,7 @@ private:
 
 protected:
   Network& _network;
-  loss_ptr_t _loss;
+  const loss_ptr_t _loss;
 };
 
 } // namespace ccml

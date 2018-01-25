@@ -20,13 +20,6 @@ void AdamNodeData::reset()
   std::fill(vW.begin(), vW.end(), 0.0);
 }
 
-Adam::Adam(Network& network, const loss_ptr_t& loss, double rate, double beta1, double beta2, double epsilon):
-  SgdExtension(network, loss, rate), 
-  _beta1(beta1), _beta2(beta2), _epsilon(epsilon), 
-  _lr(0.0), _t(0)
-{ 
-}
-
 void Adam::adjustNode(Node& node, GradientData& gradients, size_t layerIdx, size_t nodeIdx)
 {
   AdamNodeData& data = nodeData(layerIdx, nodeIdx);

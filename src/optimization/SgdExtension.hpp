@@ -12,7 +12,8 @@ template<typename NodeData>
 class SgdExtension: public StochasticGradientDescent
 {
 protected:
-  SgdExtension(Network& network, const loss_ptr_t& loss, double rate);
+  template<typename Tl>
+  SgdExtension(Network& network, Tl&& loss, double rate);
 
   const NodeData& nodeData(size_t layerIdx, size_t nodeIdx) const;
 
@@ -25,8 +26,9 @@ private:
 };
 
 template<typename NodeData>
-SgdExtension<NodeData>::SgdExtension(Network& network, const loss_ptr_t& loss, double rate):
-  StochasticGradientDescent(network, loss, rate)
+template<typename Tl>
+SgdExtension<NodeData>::SgdExtension(Network& network, Tl&& loss, double rate):
+  StochasticGradientDescent(network, std::forward<Tl>(loss), rate)
 {
   _nodeData.resize(_network.size());
   for(size_t layerIdx=0; layerIdx < _network.size(); ++layerIdx)
