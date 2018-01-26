@@ -39,7 +39,11 @@ void CrossEntropySigmoid::validate(const Network& network) const
   auto transferLayer = std::dynamic_pointer_cast<TransferLayer>(network.outputLayer());
   if((transferLayer == nullptr) || (transferLayer->transfer().name() != "sigmoid"))
   {
-    throw std::logic_error("CrossEntropySigmoid is compatible only with networks having SigmoidLayer output");
+    throw std::logic_error("CrossEntropySigmoid is compatible only with networks having Sigmoid output");
+  }
+  else if(transferLayer->outputSize() != 1) 
+  {
+    throw std::logic_error("CrossEntropySigmoid is compatible only with networks having single output");
   }
 }
 
