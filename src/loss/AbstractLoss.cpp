@@ -18,7 +18,7 @@ void AbstractLoss::validate(const Network& network) const
 {
   if(network.size() == 0) 
   {
-    throw std::logic_error("AbstractLoss function not valid for empty networks");
+    throw std::logic_error("AbstractLoss not valid for empty networks");
   }
 }
 

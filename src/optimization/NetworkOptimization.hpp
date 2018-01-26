@@ -20,11 +20,7 @@ protected:
   virtual void initEpoch();
 
 protected:
-  template<typename Tl>
-  NetworkOptimization(Network& network, Tl&& loss): 
-    _network(network), 
-    _loss(std::forward<Tl>(loss)) 
-  {}
+  NetworkOptimization(Network& network, loss_ptr_t loss);
 
   virtual ~NetworkOptimization() {}
 

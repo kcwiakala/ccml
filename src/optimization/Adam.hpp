@@ -20,12 +20,7 @@ struct AdamNodeData
 class Adam: public SgdExtension<AdamNodeData>
 {
 public:
-  template<typename Tl>
-  Adam(Network& network, Tl&& loss, double rate, double beta1 = 0.9, double beta2 = 0.999, double epsilon = 1e-8):
-    SgdExtension(network, std::forward<Tl>(loss), rate), 
-    _beta1(beta1), _beta2(beta2), _epsilon(epsilon), 
-    _lr(0.0), _t(0)
-  {}
+  Adam(Network& network, loss_ptr_t loss, double rate, double beta1 = 0.9, double beta2 = 0.999, double epsilon = 1e-8);
 
 protected:
   virtual void adjustNode(Node& node, GradientData& gradients, size_t layerIdx, size_t neuronIdx);

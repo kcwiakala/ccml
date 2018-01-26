@@ -18,13 +18,7 @@ struct GradientData
 class StochasticGradientDescent: public Backpropagation
 {
 public:
-  template<typename Tl>
-  StochasticGradientDescent(Network& network, Tl&& loss, double rate):
-    Backpropagation(network, std::forward<Tl>(loss)),
-    _rate(rate)
-  {
-    initGradients(); 
-  }
+  StochasticGradientDescent(Network& network, loss_ptr_t loss, double rate);
 
 protected:
   virtual void adjustNode(Node& node, GradientData& gradients, size_t layerIdx, size_t nodeIdx);
@@ -39,9 +33,6 @@ protected:
   void normalizeGradients(size_t batchSize);
 
   void adjustNodes();
-
-private:
-  void initGradients();
 
 protected:
   const double _rate;

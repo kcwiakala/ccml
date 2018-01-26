@@ -4,6 +4,12 @@
 
 namespace ccml {
 
+NetworkOptimization::NetworkOptimization(Network& network, loss_ptr_t loss): 
+    _network(network), 
+    _loss(std::move(loss)) 
+{
+}
+
 void NetworkOptimization::advanceBatch(sample_batch_t& batch, const sample_list_t& samples, size_t batchSize) const
 {
   if(batch.second == samples.end())

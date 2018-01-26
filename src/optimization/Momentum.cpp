@@ -19,6 +19,12 @@ void MomentumNodeData::reset()
   std::fill(deltaWeight.begin(), deltaWeight.end(), 0.0);
 }
 
+Momentum::Momentum(Network& network, loss_ptr_t loss, double rate, double momentum):
+    SgdExtension(network, std::move(loss), rate),
+    _momentum(momentum)
+{
+}
+
 void Momentum::adjustNode(Node& node, GradientData& gradients, size_t layerIdx, size_t nodeIdx)
 {
   MomentumNodeData& data = nodeData(layerIdx, nodeIdx);

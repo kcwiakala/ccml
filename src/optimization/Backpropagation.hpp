@@ -8,10 +8,7 @@ namespace ccml {
 class Backpropagation: public NetworkOptimization
 {
 protected:
-  template<typename Tl>
-  Backpropagation(Network& network, Tl&& loss):
-    NetworkOptimization(network, std::forward<Tl>(loss))
-  {}
+  Backpropagation(Network& network, loss_ptr_t loss);
 
   void passSample(const Sample& sample, array_2d_t& activation, array_2d_t& error) const;
 

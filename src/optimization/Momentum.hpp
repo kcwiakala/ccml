@@ -18,11 +18,7 @@ struct MomentumNodeData
 class Momentum: public SgdExtension<MomentumNodeData>
 {
 public:
-  template<typename Tl>
-  Momentum(Network& network, Tl&& loss, double rate, double momentum):
-    SgdExtension(network, std::forward<Tl>(loss), rate),
-    _momentum(momentum)
-  {}
+  Momentum(Network& network, loss_ptr_t loss, double rate, double momentum);
 
 protected:
   virtual void adjustNode(Node& node, GradientData& gradients, size_t layerIdx, size_t neuronIdx);
