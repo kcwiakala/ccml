@@ -1,6 +1,6 @@
 #include <iostream>
 #include <algorithm>
-#include <Utils.hpp>
+
 #include <optimization/Momentum.hpp>
 
 namespace ccml {

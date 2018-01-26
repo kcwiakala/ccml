@@ -4,7 +4,6 @@
 #include <random>
 
 #include <layer/NeuronLayer.hpp>
-#include <Utils.hpp>
 #include "StochasticGradientDescent.hpp"
 
 namespace ccml {

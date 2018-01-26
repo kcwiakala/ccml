@@ -23,17 +23,18 @@ inline std::ostream& operator<<(std::ostream& stream, const ccml::Serializable& 
   return stream;
 }
 
-template<typename S>
-typename std::enable_if<std::is_base_of<ccml::Serializable, S>::value,std::ostream&>::type 
-  operator<<(std::ostream& stream, const std::shared_ptr<S>& ptr)
+template<typename T>
+using enable_if_serializable = std::enable_if_t<std::is_base_of<ccml::Serializable, T>::value>;
+
+template<typename T, typename = enable_if_serializable<T>>
+std::ostream& operator<<(std::ostream& stream, const std::shared_ptr<T>& ptr)
 {
   ptr->toStream(stream);
   return stream;
 }
 
-template<typename S>
-typename std::enable_if<std::is_base_of<ccml::Serializable, S>::value,std::ostream&>::type 
-  operator<<(std::ostream& stream, const std::unique_ptr<S>& ptr)
+template<typename T, typename = enable_if_serializable<T>>
+std::ostream& operator<<(std::ostream& stream, const std::unique_ptr<T>& ptr)
 {
   ptr->toStream(stream);
   return stream;

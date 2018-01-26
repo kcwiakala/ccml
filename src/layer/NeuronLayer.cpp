@@ -3,8 +3,6 @@
 
 #include "NeuronLayer.hpp"
 
-#include <Utils.hpp>
-
 namespace ccml {
 
 using namespace std::placeholders;
