@@ -37,6 +37,8 @@ public:
   
   size_t size() const;
 
+  layer_ptr_t outputLayer() const;
+
   layer_ptr_t layer(size_t idx) const;
 
   neuron_layer_ptr_t neuronLayer(size_t idx) const;

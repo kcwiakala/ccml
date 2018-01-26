@@ -32,6 +32,11 @@ size_t Network::size() const
   return _layers.size();
 }
 
+layer_ptr_t Network::outputLayer() const
+{
+  return _layers.back();
+}
+
 layer_ptr_t Network::layer(size_t idx) const
 {
   return _layers.at(idx).first;
