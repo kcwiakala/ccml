@@ -9,9 +9,9 @@ namespace loss {
 class MeanSquaredError: public AbstractLoss
 {
 public:
-  virtual value_t compute(const Network& network, const Sample& sample) const;
+  virtual value_t compute(const Network& network, const Sample& sample) const override;
 
-  virtual value_t error(value_t predicted, value_t expected) const;
+  virtual void error(const array_t& predicted, const array_t& expected, array_t& error) const override;
 };
 
 } // namespace loss

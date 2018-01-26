@@ -14,6 +14,11 @@ value_t AbstractLoss::compute(const Network& network, const sample_list_t& sampl
   }) / samples.size();
 }
 
+bool AbstractLoss::includesTransfer() const
+{
+  return false;
+}
+
 void AbstractLoss::validate(const Network& network) const
 {
   if(network.size() == 0) 

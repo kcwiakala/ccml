@@ -21,9 +21,12 @@ value_t CrossEntropySoftmax::compute(const Network& network, const Sample& sampl
   return std::accumulate(aux.begin(), aux.end(), 0.0);
 }
 
-value_t CrossEntropySoftmax::error(value_t predicted, value_t expected) const
+void CrossEntropySoftmax::error(const array_t& predicted, const array_t& expected, array_t& error) const
 {
-  return predicted - expected;
+  error.resize(predicted.size());
+  std::transform(predicted.cbegin(), predicted.cend(), expected.cbegin(), error.begin(), [&](value_t y, value_t y_) {
+    return y - y_;
+  });
 }
 
 void CrossEntropySoftmax::validate(const Network& network) const
@@ -31,11 +34,16 @@ void CrossEntropySoftmax::validate(const Network& network) const
   AbstractLoss::validate(network);
 
   // Check that last layer is a softmax layer
-  // layer_ptr_t layer = network.layer(network.size() - 1);
-  // if(dynamic_cast<const SoftmaxLayer*>(layer.get()) == nullptr)
-  // {
-  //   throw std::logic_error("CrossEntropySoftmax is compatible only with networks having SoftmaxLayer output");
-  // }
+  auto transferLayer = std::dynamic_pointer_cast<TransferLayer>(network.outputLayer());
+  if((transferLayer == nullptr) || (transferLayer->transfer().name() != "softmax"))
+  {
+    throw std::logic_error("CrossEntropySoftmax is compatible only with networks having SoftmaxLayer output");
+  }
+}
+
+bool CrossEntropySoftmax::includesTransfer() const
+{
+  return true;
 }
 
 } // namespace loss

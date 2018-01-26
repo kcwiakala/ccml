@@ -17,8 +17,6 @@ public:
 public:
   virtual ~NeuronLayer();
 
-  virtual void error(const array_t& y, const array_t& dy, array_t& e) const;
-
   virtual void splitError(const array_t& x, const array_t& error, const error_reader_t& reader) const = 0;
 
   void init(const initializer_t& weightInit, const initializer_t& biasInit);

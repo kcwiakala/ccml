@@ -19,7 +19,9 @@ public:
 
   virtual value_t compute(const Network& network, const Sample& sample) const = 0;
 
-  virtual value_t error(value_t predicted, value_t expected) const = 0;
+  virtual void error(const array_t& predicted, const array_t& expected, array_t& error) const = 0;
+
+  virtual bool includesTransfer() const;
 
   virtual void validate(const Network& network) const;
 };

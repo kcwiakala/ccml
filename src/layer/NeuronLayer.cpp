@@ -11,14 +11,6 @@ using namespace std::placeholders;
 
 NeuronLayer::~NeuronLayer() = default;
 
-void NeuronLayer::error(const array_t& y, const array_t& dy, array_t& e) const
-{
-  transfer().deriverate(y, e);
-  std::transform(e.cbegin(), e.cend(), dy.cbegin(), e.begin(), [](value_t ei, value_t dyi) {
-    return dyi * ei;
-  });
-}
-
 void NeuronLayer::init(const initializer_t& weightInit, const initializer_t& biasInit)
 {
   std::for_each(_nodes.begin(), _nodes.end(), [&](Node& node) {

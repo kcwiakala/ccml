@@ -6,6 +6,7 @@
 #include <layer/FullyConnectedLayer.hpp>
 #include <layer/TransferLayer.hpp>
 #include <loss/CrossEntropySigmoid.hpp>
+#include <loss/MeanSquaredError.hpp>
 #include <optimization/StochasticGradientDescent.hpp>
 #include <optimization/Momentum.hpp>
 #include <optimization/Adam.hpp>

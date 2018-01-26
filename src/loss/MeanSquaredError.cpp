@@ -21,9 +21,12 @@ value_t MeanSquaredError::compute(const Network& network, const Sample& sample) 
   return std::accumulate(aux.cbegin(), aux.cend(), 0.0) / aux.size();
 }
 
-value_t MeanSquaredError::error(value_t predicted, value_t expected) const
+void MeanSquaredError::error(const array_t& predicted, const array_t& expected, array_t& error) const
 {
-  return (predicted - expected);
+  error.resize(predicted.size());
+  std::transform(predicted.cbegin(), predicted.cend(), expected.cbegin(), error.begin(), [&](value_t y, value_t y_) {
+    return y - y_;
+  });
 }
 
 } // namespace loss

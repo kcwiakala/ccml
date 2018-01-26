@@ -23,11 +23,12 @@ value_t CrossEntropySigmoid::compute(const Network& network, const Sample& sampl
 
 }
 
-value_t CrossEntropySigmoid::error(value_t predicted, value_t expected) const
+void CrossEntropySigmoid::error(const array_t& predicted, const array_t& expected, array_t& error) const
 {
-  const value_t denominator = predicted * (1 - predicted);
-  const value_t difference = predicted - expected;
-  return (denominator < 1e-9) ? difference : (difference / denominator);
+  error.resize(predicted.size());
+  std::transform(predicted.cbegin(), predicted.cend(), expected.cbegin(), error.begin(), [&](value_t y, value_t y_) {
+    return y - y_;
+  });
 }
 
 void CrossEntropySigmoid::validate(const Network& network) const
@@ -35,12 +36,16 @@ void CrossEntropySigmoid::validate(const Network& network) const
   AbstractLoss::validate(network);
 
   // Check that last layer is a softmax layer
-  // layer_ptr_t layer = network.layer(network.size() - 1);
-  // auto transferLayer = dynamic_cast<const TransferLayer*>(layer.get());
-  // if((transferLayer == nullptr) || !(transferLayer->transfer() == transfer::sigmoid()))
-  // {
-  //   throw std::logic_error("CrossEntropySigmoid is compatible only with networks having SigmoidLayer output");
-  // }
+  auto transferLayer = std::dynamic_pointer_cast<TransferLayer>(network.outputLayer());
+  if((transferLayer == nullptr) || (transferLayer->transfer().name() != "sigmoid"))
+  {
+    throw std::logic_error("CrossEntropySigmoid is compatible only with networks having SigmoidLayer output");
+  }
+}
+
+bool CrossEntropySigmoid::includesTransfer() const
+{
+  return true;
 }
 
 } // namespace loss
