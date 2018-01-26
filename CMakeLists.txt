@@ -20,7 +20,7 @@ if(GTEST_FOUND)
 
   target_compile_definitions(utest PUBLIC UNIT_TESTS)
   
-  target_include_directories(utest PUBLIC ${GTEST_INCLUDE_DIRS})
+  target_include_directories(utest PUBLIC "test" ${GTEST_INCLUDE_DIRS})
 
   target_link_libraries(utest PUBLIC ${GTEST_LIBRARIES} gmock pthread ccml)
 

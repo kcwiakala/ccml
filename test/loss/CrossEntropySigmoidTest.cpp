@@ -1,5 +1,4 @@
-#include <gtest/gtest.h>
-#include <gmock/gmock.h>
+#include <CcmlTest.hpp>
 
 #include <loss/CrossEntropySigmoid.hpp>
 #include <layer/FullyConnectedLayer.hpp>
@@ -12,16 +11,7 @@ namespace ccml {
 
 using ::testing::EndsWith;
 
-#define EXPECT_THROW_MATCHING(statement, exc, matcher) \
-  EXPECT_THROW({ \
-    try { \
-    statement; \
-    } catch(exc& e) { \
-      EXPECT_THAT(e.what(), matcher); \
-      throw; \
-    }}, exc)
-
-class CrossEntropySigmoidTest: public testing::Test
+class CrossEntropySigmoidTest: public CcmlTest
 {
 protected:
   CrossEntropySigmoidTest():
