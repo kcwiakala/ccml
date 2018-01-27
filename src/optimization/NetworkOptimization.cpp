@@ -6,7 +6,8 @@ namespace ccml {
 
 NetworkOptimization::NetworkOptimization(Network& network, loss_ptr_t loss): 
     _network(network), 
-    _loss(std::move(loss)) 
+    _loss(std::move(loss)),
+    _transferIncluded(_loss->includesTransfer())
 {
   _loss->validate(_network);
 }

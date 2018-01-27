@@ -30,6 +30,7 @@ private:
 protected:
   Network& _network;
   const loss_ptr_t _loss;
+  const bool _transferIncluded;
 };
 
 } // namespace ccml

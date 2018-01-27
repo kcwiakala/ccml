@@ -31,7 +31,7 @@ void Backpropagation::feed(const Sample& sample, array_2d_t& activation, array_t
   const array_t& output = activation.back();
 
   _loss->error(output, sample.output, error);
-  if(!_loss->includesTransfer())
+  if(!_transferIncluded)
   {
     thread_local static array_t aux;  
     _network.outputLayer()->error(output, error, aux);
