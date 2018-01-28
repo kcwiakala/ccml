@@ -1,6 +1,8 @@
 #ifndef CCML_STOCHASTIC_GRADIENT_DESCENT_HPP
 #define CCML_STOCHASTIC_GRADIENT_DESCENT_HPP
 
+#include <mutex>
+
 #include "Backpropagation.hpp"
 
 namespace ccml {
@@ -24,7 +26,7 @@ protected:
   virtual void adjustNode(Node& node, GradientData& gradients, size_t layerIdx, size_t nodeIdx);
 
 protected:
-  virtual void learnBatch(const sample_batch_t& batch);
+  virtual void learnBatch(const sample_batch_t& batch) override;
 
   void learnSample(const Sample& sample);
 

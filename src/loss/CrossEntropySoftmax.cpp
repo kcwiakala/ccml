@@ -11,7 +11,7 @@ namespace loss {
 
 value_t CrossEntropySoftmax::compute(const Network& network, const Sample& sample) const
 {
-  thread_local static array_t aux;
+  static array_t aux;
 
   network.output(sample.input, aux);
 

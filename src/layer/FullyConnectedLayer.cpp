@@ -39,7 +39,7 @@ void FullyConnectedLayer::backpropagate(const array_t& error, array_t& inputErro
 
 void FullyConnectedLayer::splitError(const array_t& x, const array_t& error, const error_reader_t& reader) const
 {
-  thread_local static array_t aux;
+  static array_t aux;
   
   aux.resize(x.size());
   for(size_t i=0; i<_nodes.size(); ++i)

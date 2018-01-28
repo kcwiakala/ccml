@@ -1,6 +1,8 @@
 #include <algorithm>
 #include <functional>
+#include <future>
 #include <iostream>
+#include <iterator>
 #include <random>
 
 #include <layer/NeuronLayer.hpp>
@@ -108,8 +110,8 @@ void StochasticGradientDescent::adjustNode(Node& node, GradientData& gradients, 
 
 void StochasticGradientDescent::learnSample(const Sample& sample)
 {
-  thread_local static array_2d_t activation;
-  thread_local static array_2d_t error;
+  static array_2d_t activation;
+  static array_2d_t error;
 
   // Feed forward and backpropagate error
   passSample(sample, activation, error);
@@ -119,12 +121,11 @@ void StochasticGradientDescent::learnSample(const Sample& sample)
 }
 
 void StochasticGradientDescent::learnBatch(const sample_batch_t& batch)
-{
-  sample_list_t::const_iterator iter = batch.first;
-  while(iter != batch.second)
-  {
-    learnSample(*iter++);
-  }
+{  
+  std::for_each(batch.first, batch.second, [this](auto& sample) {
+    learnSample(sample);
+  });
+
   normalizeGradients(std::distance(batch.first, batch.second));
   adjustNodes();
 }

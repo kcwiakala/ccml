@@ -50,7 +50,7 @@ neuron_layer_ptr_t Network::neuronLayer(size_t idx) const
 
 void Network::output(const array_t& x, array_t& y) const
 {
-  thread_local static array_t aux;
+  static array_t aux;
 
   if(_layers.empty()) 
   {
