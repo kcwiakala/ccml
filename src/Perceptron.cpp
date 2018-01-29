@@ -25,7 +25,7 @@ void Perceptron::init(const initializer_t& initializer)
 
 value_t Perceptron::output(const array_t& input) const
 {
-  static array_t aux;
+  thread_local array_t aux;
   _layer.output(input, aux);
   return aux[0];
 }

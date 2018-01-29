@@ -9,8 +9,11 @@
 #include "StochasticGradientDescent.hpp"
 
 namespace ccml {
+namespace {
 
-using namespace std::placeholders;
+constexpr size_t BATCH_SIZE_THRESHOLD = 10;
+
+} // namespace
 
 GradientData::GradientData(const Node& node):
   weights(node.size(), 0.0),
@@ -52,7 +55,8 @@ void StochasticGradientDescent::updateGradients(const array_t& input, const arra
     if(layer)
     {
       const array_t& layerInput = (layerIdx == 0) ? input : activation[layerIdx - 1];
-      layer->splitError(layerInput, error[layerIdx], [&](const array_t& inputError, size_t nodeIdx) {
+      layer->splitError(layerInput, error[layerIdx], [this, layerIdx, &error](const array_t& inputError, size_t nodeIdx) {
+        std::lock_guard<std::mutex> lock(_mtx);
         GradientData& data = _gradients[layerIdx][nodeIdx];
         std::transform(data.weights.cbegin(), data.weights.cend(), 
             inputError.cbegin(), data.weights.begin(), 
@@ -73,7 +77,7 @@ void StochasticGradientDescent::normalizeGradients(size_t batchSize)
       for(size_t nodeIdx=0; nodeIdx < layer->size(); ++nodeIdx)
       {
         GradientData& gradients = _gradients[layerIdx][nodeIdx];
-        std::transform(gradients.weights.cbegin(), gradients.weights.cend(), gradients.weights.begin(), [=](value_t g) {
+        std::transform(gradients.weights.cbegin(), gradients.weights.cend(), gradients.weights.begin(), [batchSize](value_t g) {
           return g / batchSize;
         });
         gradients.bias /= batchSize;
@@ -110,8 +114,8 @@ void StochasticGradientDescent::adjustNode(Node& node, GradientData& gradients, 
 
 void StochasticGradientDescent::learnSample(const Sample& sample)
 {
-  static array_2d_t activation;
-  static array_2d_t error;
+  thread_local array_2d_t activation;
+  thread_local array_2d_t error;
 
   // Feed forward and backpropagate error
   passSample(sample, activation, error);
@@ -122,9 +126,26 @@ void StochasticGradientDescent::learnSample(const Sample& sample)
 
 void StochasticGradientDescent::learnBatch(const sample_batch_t& batch)
 {  
-  std::for_each(batch.first, batch.second, [this](auto& sample) {
-    learnSample(sample);
-  });
+  const size_t batchSize = std::distance(batch.first, batch.second);
+  if(batchSize >= BATCH_SIZE_THRESHOLD)
+  {
+    std::vector<std::future<void>> futures;
+    futures.reserve(std::distance(batch.first, batch.second));
+    std::for_each(batch.first, batch.second, [this, &futures](auto& sample) {
+      futures.emplace_back(std::async([this, &sample](){
+        learnSample(sample);
+      }));
+    });
+    std::for_each(futures.cbegin(), futures.cend(), [](auto& future) {
+      future.wait();
+    });
+  }
+  else
+  {
+    std::for_each(batch.first, batch.second, [this](auto& sample) {
+      learnSample(sample);
+    });
+  }
 
   normalizeGradients(std::distance(batch.first, batch.second));
   adjustNodes();

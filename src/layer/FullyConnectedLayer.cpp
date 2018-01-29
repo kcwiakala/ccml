@@ -25,7 +25,7 @@ void FullyConnectedLayer::output(const array_t& x, array_t& y) const
 
 void FullyConnectedLayer::backpropagate(const array_t& error, array_t& inputError) const
 {
-  inputError.resize(_inputSize, 0.0);
+  inputError.assign(_inputSize, 0.0);
   for(size_t i=0; i<_nodes.size(); ++i) 
   {
     const value_t& neuronError = error[i];
@@ -39,7 +39,7 @@ void FullyConnectedLayer::backpropagate(const array_t& error, array_t& inputErro
 
 void FullyConnectedLayer::splitError(const array_t& x, const array_t& error, const error_reader_t& reader) const
 {
-  static array_t aux;
+  thread_local array_t aux;
   
   aux.resize(x.size());
   for(size_t i=0; i<_nodes.size(); ++i)

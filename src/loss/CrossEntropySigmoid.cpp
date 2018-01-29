@@ -12,7 +12,7 @@ namespace loss {
 
 value_t CrossEntropySigmoid::compute(const Network& network, const Sample& sample) const
 {
-  static array_t aux;
+  thread_local array_t aux;
 
   network.output(sample.input, aux);
 

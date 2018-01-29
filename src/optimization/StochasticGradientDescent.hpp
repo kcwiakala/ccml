@@ -39,6 +39,7 @@ protected:
 protected:
   const double _rate;
   vector_2d<GradientData> _gradients;
+  std::mutex _mtx;
 };
 
 } // namespace ccml
