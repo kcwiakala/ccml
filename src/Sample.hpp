@@ -9,6 +9,8 @@ struct Sample
 {
   Sample(const array_t& i, const array_t& o): input(i), output(o) {}
 
+  Sample(array_t&& i, array_t&& o): input(std::move(i)), output(std::move(o)) {}
+
   const array_t input;
   const array_t output;
 };

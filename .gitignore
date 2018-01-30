@@ -9,5 +9,6 @@ test.out
 *.a
 *.so
 utest
+MNIST
 
 core

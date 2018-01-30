@@ -17,11 +17,15 @@ find_package(GTest)
 
 if(GTEST_FOUND) 
   add_executable(utest ${test_sources})
-
+  add_dependencies(utest ccml)
   target_compile_definitions(utest PUBLIC UNIT_TESTS)
-  
   target_include_directories(utest PUBLIC "test" ${GTEST_INCLUDE_DIRS})
-
   target_link_libraries(utest PUBLIC ${GTEST_LIBRARIES} gmock pthread ccml)
+
+  file(GLOB_RECURSE mnist_sources "mnist/*.cpp")
+  add_executable(MNIST ${mnist_sources})
+  add_dependencies(MNIST ccml)
+  target_include_directories(MNIST PUBLIC "mnist" ${GTEST_INCLUDE_DIRS})
+  target_link_libraries(MNIST PUBLIC ${GTEST_LIBRARIES} gmock pthread ccml)
 
 endif()
