@@ -29,7 +29,7 @@ void GradientData::reset()
 
 StochasticGradientDescent::StochasticGradientDescent(Network& network, loss_ptr_t loss, double rate):
     Backpropagation(network, std::move(loss)),
-    _rate(rate)
+    _rate(rate),_tp(std::thread::hardware_concurrency())
 {
   _gradients.resize(_network.size());
 
@@ -132,13 +132,14 @@ void StochasticGradientDescent::learnBatch(const sample_batch_t& batch)
     std::vector<std::future<void>> futures;
     futures.reserve(std::distance(batch.first, batch.second));
     std::for_each(batch.first, batch.second, [this, &futures](auto& sample) {
-      futures.emplace_back(std::async([this, &sample](){
+      futures.emplace_back(_tp.enqueue([this, &sample](){
         learnSample(sample);
       }));
     });
-    std::for_each(futures.cbegin(), futures.cend(), [](auto& future) {
-      future.wait();
-    });
+    for(auto& fut: futures)
+    {
+      fut.wait();
+    }
   }
   else
   {

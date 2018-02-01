@@ -5,6 +5,7 @@ project (ccml)
 set(CMAKE_CXX_STANDARD 17)
 
 include_directories("src")
+include_directories("tp")
 
 file(GLOB_RECURSE sources "src/*.cpp")
 file(GLOB_RECURSE test_sources "test/*.cpp")

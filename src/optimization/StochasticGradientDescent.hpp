@@ -3,6 +3,8 @@
 
 #include <mutex>
 
+#include <ThreadPool.hpp>
+
 #include "Backpropagation.hpp"
 
 namespace ccml {
@@ -40,6 +42,7 @@ protected:
   const double _rate;
   vector_2d<GradientData> _gradients;
   std::mutex _mtx;
+  izi::ThreadPool _tp;
 };
 
 } // namespace ccml
